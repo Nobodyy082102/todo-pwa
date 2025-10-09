@@ -30,6 +30,20 @@ import { ZenGarden } from './components/ZenGarden';
 import { VoiceInput } from './components/VoiceInput';
 import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
+import { BossBattles } from './components/BossBattles';
+import { DailyQuests } from './components/DailyQuests';
+import { GachaSystem } from './components/GachaSystem';
+import { WorldMap } from './components/WorldMap';
+import { CoOpMode } from './components/CoOpMode';
+import { SkillTree } from './components/SkillTree';
+import { MiniGames } from './components/MiniGames';
+import { HabitTrackerPlus } from './components/HabitTrackerPlus';
+import { AvatarCustomizer } from './components/AvatarCustomizer';
+import { TimeTravel } from './components/TimeTravel';
+import { CityBuilder } from './components/CityBuilder';
+import { CardBattler } from './components/CardBattler';
+import { ProductivityBeats } from './components/ProductivityBeats';
+import { TaskCasino } from './components/TaskCasino';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
 import { checkNewAchievements } from './utils/achievements';
@@ -324,6 +338,48 @@ function App() {
 
         {/* Voice Input - Brain Dump */}
         <VoiceInput onTasksCreated={addMultipleTodos} />
+
+        {/* MEGA FEATURES ROW 1 - Boss Battles & Daily Quests */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <BossBattles todos={todos} onTaskCreate={addTodo} />
+          <DailyQuests todos={todos} />
+        </div>
+
+        {/* MEGA FEATURES ROW 2 - Gacha & World Map */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <GachaSystem todos={todos} />
+          <WorldMap todos={todos} />
+        </div>
+
+        {/* MEGA FEATURES ROW 3 - Skill Tree & Mini Games */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SkillTree todos={todos} />
+          <MiniGames />
+        </div>
+
+        {/* MEGA FEATURES ROW 4 - City Builder & Task Casino */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <CityBuilder todos={todos} />
+          <TaskCasino todos={todos} />
+        </div>
+
+        {/* MEGA FEATURES ROW 5 - Card Battler & Productivity Beats */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <CardBattler todos={todos} />
+          <ProductivityBeats todos={todos} />
+        </div>
+
+        {/* MEGA FEATURES ROW 6 - Habit Tracker & Avatar */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <HabitTrackerPlus todos={todos} />
+          <AvatarCustomizer todos={todos} />
+        </div>
+
+        {/* MEGA FEATURES ROW 7 - Time Travel & Co-Op */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <TimeTravel todos={todos} />
+          <CoOpMode todos={todos} />
+        </div>
 
         {/* Export Panel */}
         <ExportPanel todos={todos} />
