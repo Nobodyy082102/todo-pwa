@@ -123,33 +123,42 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
   };
 
   const getTailAnimation = () => {
+    // Sincronizzata con il movimento del corpo
     switch (animationType) {
       case 'jump':
         return {
           d: [
-            "M 8 40 Q 2 38 4 30",
-            "M 8 40 Q 0 40 2 32",
-            "M 8 40 Q 1 36 3 28",
-            "M 8 40 Q 2 38 4 30",
+            "M 10 42 Q 4 40 6 32",
+            "M 10 42 Q 2 42 4 34",
+            "M 10 42 Q 5 38 7 30",
+            "M 10 42 Q 3 40 5 32",
+            "M 10 42 Q 4 38 6 30",
+            "M 10 42 Q 5 40 7 32",
+            "M 10 42 Q 4 40 6 32",
           ]
         };
       case 'celebrate':
         return {
           d: [
-            "M 8 40 Q 2 38 4 30",
-            "M 8 40 Q -2 42 0 34",
-            "M 8 40 Q 1 30 3 24",
-            "M 8 40 Q -1 40 2 32",
-            "M 8 40 Q 3 32 6 26",
-            "M 8 40 Q 2 38 4 30",
+            "M 10 42 Q 4 40 6 32",
+            "M 10 42 Q 0 44 2 36",
+            "M 10 42 Q 3 32 5 26",
+            "M 10 42 Q -1 42 3 34",
+            "M 10 42 Q 5 34 8 28",
+            "M 10 42 Q 1 40 4 32",
+            "M 10 42 Q 4 36 7 30",
+            "M 10 42 Q 2 38 5 32",
+            "M 10 42 Q 4 40 6 32",
           ]
         };
-      default:
+      default: // idle - sincronizzata perfettamente
         return {
           d: [
-            "M 8 40 Q 2 38 4 30",
-            "M 8 40 Q 1 36 3 32",
-            "M 8 40 Q 2 38 4 30",
+            "M 10 42 Q 4 40 6 32",
+            "M 10 42 Q 3 38 5 33",
+            "M 10 42 Q 5 39 7 31",
+            "M 10 42 Q 3 39 5 32",
+            "M 10 42 Q 4 40 6 32",
           ]
         };
     }
@@ -306,13 +315,13 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             } : {}}
             transition={{ duration: 0.6, repeat: animationType === 'celebrate' ? 4 : 0 }}
           >
-            {/* Occhi VERDI smeraldo */}
+            {/* Occhi VERDI CHIARI brillanti */}
             <motion.ellipse
               cx="26"
               cy="23"
               rx="3.5"
               ry="5"
-              fill="#10B981"
+              fill="#6EE7B7"
               animate={{ scaleY: [1, 0.08, 1] }}
               transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4.5, ease: "easeInOut" }}
             />
@@ -321,7 +330,7 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
               cy="23"
               rx="3.5"
               ry="5"
-              fill="#10B981"
+              fill="#6EE7B7"
               animate={{ scaleY: [1, 0.08, 1] }}
               transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4.5, ease: "easeInOut" }}
             />
@@ -470,7 +479,7 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             )}
           </motion.g>
 
-          {/* Coda arancione animata ULTRA FLUIDA */}
+          {/* Coda arancione animata SINCRONIZZATA */}
           <motion.path
             stroke="#FF9A56"
             strokeWidth="5.8"
@@ -478,25 +487,25 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             strokeLinecap="round"
             animate={getTailAnimation()}
             transition={{
-              duration: animationType === 'idle' ? 4.5 : animationType === 'jump' ? 1.3 : 2.4,
+              duration: animationType === 'idle' ? 4 : animationType === 'jump' ? 1.5 : 2.5,
               repeat: Infinity,
               ease: "easeInOut",
               repeatType: "reverse"
             }}
           />
-          {/* Punta coda bianca cremosa */}
+          {/* Punta coda bianca cremosa SINCRONIZZATA */}
           <motion.circle
-            cx="4"
-            cy="30"
+            cx="6"
+            cy="32"
             r="3.2"
             fill="#FFF8F0"
             animate={{
-              x: animationType === 'idle' ? [0, -1.5, 0, -0.8, 0] : animationType === 'jump' ? [-3, 3, -2, 3, -3] : [-4, 4, -3, 4, -4],
-              y: animationType === 'idle' ? [0, -1.5, 0, -0.8, 0] : [-3, 3, -2, 3, -3],
-              scale: [1, 1.05, 1, 1.03, 1]
+              x: animationType === 'idle' ? [0, -2, -0.5, -1.5, 0] : animationType === 'jump' ? [-4, 4, -2, 4, -3, 4, -4] : [-5, 5, -3, 5, -4, 5, -5, 4, -5],
+              y: animationType === 'idle' ? [0, -2, -0.5, -1, 0] : animationType === 'jump' ? [-4, 4, -2, 4, -3, 4, -4] : [-5, 5, -3, 5, -4, 5, -5, 4, -5],
+              scale: [1, 1.08, 1.03, 1.05, 1]
             }}
             transition={{
-              duration: animationType === 'idle' ? 4.5 : animationType === 'jump' ? 1.3 : 2.4,
+              duration: animationType === 'idle' ? 4 : animationType === 'jump' ? 1.5 : 2.5,
               repeat: Infinity,
               ease: "easeInOut",
               repeatType: "reverse"
