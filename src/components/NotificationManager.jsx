@@ -32,14 +32,11 @@ export function NotificationManager({ todos, onSnooze, onComplete }) {
           closeNotification(`todo-${todo.id}`);
 
           const notification = showNotification(todo.title, {
-            body: todo.description || 'Completa questa attività!',
+            body: todo.description || 'Clicca per completare questa attività',
             tag: `todo-${todo.id}`,
             requireInteraction: true,
             vibrate: [200, 100, 200],
-            actions: [
-              { action: 'complete', title: 'Completa' },
-              { action: 'snooze', title: 'Snooze 30min' },
-            ],
+            silent: false,
           });
 
           if (notification) {
@@ -48,24 +45,12 @@ export function NotificationManager({ todos, onSnooze, onComplete }) {
               notifiedTodosRef.current.add(todo.id);
             }
 
-            // Gestisci click sulla notifica
+            // Gestisci click sulla notifica - completa il TODO
             notification.onclick = () => {
+              window.focus();
               onComplete(todo.id);
               notification.close();
             };
-
-            // Gestisci azioni (se supportate dal browser)
-            if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-              navigator.serviceWorker.addEventListener('message', (event) => {
-                if (event.data.type === 'NOTIFICATION_ACTION') {
-                  if (event.data.action === 'complete' && event.data.todoId === todo.id) {
-                    onComplete(todo.id);
-                  } else if (event.data.action === 'snooze' && event.data.todoId === todo.id) {
-                    onSnooze(todo.id, 30);
-                  }
-                }
-              });
-            }
           }
         }
       });
