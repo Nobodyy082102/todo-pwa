@@ -123,42 +123,69 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
   };
 
   const getTailAnimation = () => {
-    // Sincronizzata con il movimento del corpo
+    // Sincronizzata PERFETTAMENTE con il movimento del corpo
     switch (animationType) {
       case 'jump':
         return {
-          d: [
-            "M 10 42 Q 4 40 6 32",
-            "M 10 42 Q 2 42 4 34",
-            "M 10 42 Q 5 38 7 30",
-            "M 10 42 Q 3 40 5 32",
-            "M 10 42 Q 4 38 6 30",
-            "M 10 42 Q 5 40 7 32",
-            "M 10 42 Q 4 40 6 32",
+          path: [
+            "M 18 40 Q 12 38 8 30",
+            "M 18 40 Q 10 40 6 32",
+            "M 18 40 Q 13 36 9 28",
+            "M 18 40 Q 11 38 7 30",
+            "M 18 40 Q 12 36 8 28",
+            "M 18 40 Q 13 38 9 30",
+            "M 18 40 Q 12 38 8 30",
+          ],
+          tip: [
+            { x: 8, y: 30 },
+            { x: 6, y: 32 },
+            { x: 9, y: 28 },
+            { x: 7, y: 30 },
+            { x: 8, y: 28 },
+            { x: 9, y: 30 },
+            { x: 8, y: 30 },
           ]
         };
       case 'celebrate':
         return {
-          d: [
-            "M 10 42 Q 4 40 6 32",
-            "M 10 42 Q 0 44 2 36",
-            "M 10 42 Q 3 32 5 26",
-            "M 10 42 Q -1 42 3 34",
-            "M 10 42 Q 5 34 8 28",
-            "M 10 42 Q 1 40 4 32",
-            "M 10 42 Q 4 36 7 30",
-            "M 10 42 Q 2 38 5 32",
-            "M 10 42 Q 4 40 6 32",
+          path: [
+            "M 18 40 Q 12 38 8 30",
+            "M 18 40 Q 8 42 4 34",
+            "M 18 40 Q 11 30 7 24",
+            "M 18 40 Q 7 40 5 32",
+            "M 18 40 Q 13 32 10 26",
+            "M 18 40 Q 9 38 6 30",
+            "M 18 40 Q 12 34 9 28",
+            "M 18 40 Q 10 36 7 30",
+            "M 18 40 Q 12 38 8 30",
+          ],
+          tip: [
+            { x: 8, y: 30 },
+            { x: 4, y: 34 },
+            { x: 7, y: 24 },
+            { x: 5, y: 32 },
+            { x: 10, y: 26 },
+            { x: 6, y: 30 },
+            { x: 9, y: 28 },
+            { x: 7, y: 30 },
+            { x: 8, y: 30 },
           ]
         };
-      default: // idle - sincronizzata perfettamente
+      default: // idle - sincronizzata PERFETTAMENTE
         return {
-          d: [
-            "M 10 42 Q 4 40 6 32",
-            "M 10 42 Q 3 38 5 33",
-            "M 10 42 Q 5 39 7 31",
-            "M 10 42 Q 3 39 5 32",
-            "M 10 42 Q 4 40 6 32",
+          path: [
+            "M 18 40 Q 12 38 8 30",
+            "M 18 40 Q 11 36 7 31",
+            "M 18 40 Q 13 37 9 29",
+            "M 18 40 Q 11 37 7 31",
+            "M 18 40 Q 12 38 8 30",
+          ],
+          tip: [
+            { x: 8, y: 30 },
+            { x: 7, y: 31 },
+            { x: 9, y: 29 },
+            { x: 7, y: 31 },
+            { x: 8, y: 30 },
           ]
         };
     }
@@ -479,13 +506,15 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             )}
           </motion.g>
 
-          {/* Coda arancione animata SINCRONIZZATA */}
+          {/* Coda arancione animata PERFETTAMENTE SINCRONIZZATA */}
           <motion.path
             stroke="#FF9A56"
             strokeWidth="5.8"
             fill="none"
             strokeLinecap="round"
-            animate={getTailAnimation()}
+            animate={{
+              d: getTailAnimation().path
+            }}
             transition={{
               duration: animationType === 'idle' ? 4 : animationType === 'jump' ? 1.5 : 2.5,
               repeat: Infinity,
@@ -493,16 +522,13 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
               repeatType: "reverse"
             }}
           />
-          {/* Punta coda bianca cremosa SINCRONIZZATA */}
+          {/* Punta coda bianca - ATTACCATA PERFETTAMENTE sulla coda */}
           <motion.circle
-            cx="6"
-            cy="32"
             r="3.2"
             fill="#FFF8F0"
             animate={{
-              x: animationType === 'idle' ? [0, -2, -0.5, -1.5, 0] : animationType === 'jump' ? [-4, 4, -2, 4, -3, 4, -4] : [-5, 5, -3, 5, -4, 5, -5, 4, -5],
-              y: animationType === 'idle' ? [0, -2, -0.5, -1, 0] : animationType === 'jump' ? [-4, 4, -2, 4, -3, 4, -4] : [-5, 5, -3, 5, -4, 5, -5, 4, -5],
-              scale: [1, 1.08, 1.03, 1.05, 1]
+              cx: getTailAnimation().tip.map(t => t.x),
+              cy: getTailAnimation().tip.map(t => t.y),
             }}
             transition={{
               duration: animationType === 'idle' ? 4 : animationType === 'jump' ? 1.5 : 2.5,
