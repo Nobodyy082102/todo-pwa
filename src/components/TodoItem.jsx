@@ -1,10 +1,12 @@
-import React from 'react';
-import { Check, Trash2, Clock, Repeat, Bell } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { Check, Trash2, Clock, Repeat, Bell, Timer } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { DEFAULT_CATEGORIES } from './CategorySelector';
 import { ShareButton } from './ShareButton';
+import { PomodoroTimer } from './PomodoroTimer';
 
 export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
+  const [showPomodoro, setShowPomodoro] = useState(false);
   const priorityColors = {
     high: 'border-l-red-500 bg-red-50/50 dark:bg-red-900/10',
     medium: 'border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-900/10',
@@ -146,6 +148,19 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
         </div>
 
         <div className="flex items-start gap-2 flex-shrink-0 mt-1">
+          {!todo.completed && (
+            <button
+              onClick={() => setShowPomodoro(!showPomodoro)}
+              className={`transition-colors ${
+                showPomodoro
+                  ? 'text-indigo-600 dark:text-indigo-400'
+                  : 'text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400'
+              }`}
+              title="Timer Pomodoro"
+            >
+              <Timer size={20} />
+            </button>
+          )}
           <ShareButton todo={todo} />
           <button
             onClick={() => onDelete(todo.id)}
@@ -155,6 +170,26 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
           </button>
         </div>
       </div>
+
+      {/* Pomodoro Timer */}
+      <AnimatePresence>
+        {showPomodoro && !todo.completed && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: 'auto', marginTop: 16 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <PomodoroTimer
+              taskId={todo.id}
+              taskTitle={todo.title}
+              onSessionComplete={(taskId, timeSpent) => {
+                console.log(`Task ${taskId} - Session complete: ${timeSpent}s`);
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

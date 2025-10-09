@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useTheme } from './hooks/useTheme';
+import { useSoundEffects } from './hooks/useSoundEffects';
 import { TodoForm } from './components/TodoForm';
 import { TodoList } from './components/TodoList';
 import { FloatingActionButton } from './components/FloatingActionButton';
@@ -13,11 +14,18 @@ import { Mascot } from './components/Mascot';
 import { FilterPanel } from './components/FilterPanel';
 import { SearchBar } from './components/SearchBar';
 import { StatsDashboard } from './components/StatsDashboard';
+import { AdvancedStats } from './components/AdvancedStats';
 import { GameStats } from './components/GameStats';
+import { AchievementPanel } from './components/AchievementPanel';
+import { AchievementToast } from './components/AchievementToast';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
+import { ExportPanel } from './components/ExportPanel';
+import { FocusMode } from './components/FocusMode';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
-import { Download, Upload } from 'lucide-react';
+import { checkNewAchievements } from './utils/achievements';
+import { Download, Upload, Sparkles } from 'lucide-react';
 
 function App() {
   const [todos, setTodos] = useLocalStorage('todos', []);
@@ -27,6 +35,14 @@ function App() {
   const [taskAddedTrigger, setTaskAddedTrigger] = useState(0);
   const [taskCompletedTrigger, setTaskCompletedTrigger] = useState(0);
   const { animationsEnabled } = useTheme();
+  const { playTaskComplete, playDelete, playSnooze, playAchievement, soundEnabled, toggleSound } = useSoundEffects();
+
+  // Achievement system
+  const [unlockedAchievements, setUnlockedAchievements] = useLocalStorage('achievements', []);
+  const [currentAchievement, setCurrentAchievement] = useState(null);
+
+  // Focus Mode
+  const [showFocusMode, setShowFocusMode] = useState(false);
 
   // Filter and search state
   const [filters, setFilters] = useState({
@@ -55,6 +71,21 @@ function App() {
     }
   }, []); // Only run on mount
 
+  // Check for new achievements when todos change
+  useEffect(() => {
+    const newAchievements = checkNewAchievements(todos, unlockedAchievements);
+
+    if (newAchievements.length > 0) {
+      // Unlock achievements
+      const newIds = newAchievements.map(a => a.id);
+      setUnlockedAchievements([...unlockedAchievements, ...newIds]);
+
+      // Show first achievement (queue if multiple)
+      setCurrentAchievement(newAchievements[0]);
+      playAchievement();
+    }
+  }, [todos]);
+
   const addTodo = (todo) => {
     setTodos([...todos, todo]);
     setTaskAddedTrigger(prev => prev + 1); // Trigger elefantino
@@ -69,6 +100,9 @@ function App() {
       // Particelle celebrative!
       setShowParticles(true);
       setTimeout(() => setShowParticles(false), 1500);
+
+      // Suono di completamento!
+      playTaskComplete();
 
       // Aggiungi timestamp completamento per stats
       setTodos(
@@ -86,10 +120,12 @@ function App() {
   };
 
   const deleteTodo = (id) => {
+    playDelete();
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   const snoozeTodo = (id, minutes) => {
+    playSnooze();
     setTodos(
       todos.map((todo) => {
         if (todo.id !== id || !todo.reminder) return todo;
@@ -201,7 +237,16 @@ function App() {
                 Gestisci le tue attività in modo efficiente
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setShowFocusMode(true)}
+                disabled={pendingTodos.length === 0}
+                className="flex items-center gap-2 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white text-sm font-medium rounded-lg transition-colors"
+                title="Modalità Focus"
+              >
+                <span className="hidden sm:inline">Focus</span>
+                <Sparkles size={16} />
+              </button>
               <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                 {pendingTodos.length} attive
               </span>
@@ -234,18 +279,23 @@ function App() {
         {/* Statistics Dashboard */}
         {todos.length > 0 && <StatsDashboard todos={todos} />}
 
-        {/* Pulsanti Esporta/Importa */}
-        <div className="flex gap-3 justify-center flex-wrap">
-          <button
-            onClick={exportData}
-            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg shadow-sm transition-all font-medium"
-          >
-            <Download size={18} />
-            <span>Esporta</span>
-          </button>
-          <label className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg shadow-sm transition-all cursor-pointer font-medium">
-            <Upload size={18} />
-            <span>Importa</span>
+        {/* Advanced Statistics with Charts */}
+        {todos.length > 0 && <AdvancedStats todos={todos} />}
+
+        {/* Achievement Panel */}
+        <AchievementPanel unlockedAchievements={unlockedAchievements} />
+
+        {/* Theme Switcher */}
+        <ThemeSwitcher />
+
+        {/* Export Panel */}
+        <ExportPanel todos={todos} />
+
+        {/* Import Button */}
+        <div className="flex justify-center">
+          <label className="flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl shadow-lg transition-all cursor-pointer font-medium hover-lift">
+            <Upload size={20} />
+            <span>Importa da JSON</span>
             <input
               type="file"
               accept=".json"
@@ -325,6 +375,14 @@ function App() {
         </div>
       )}
 
+      {/* Achievement Toast */}
+      {currentAchievement && (
+        <AchievementToast
+          achievement={currentAchievement}
+          onClose={() => setCurrentAchievement(null)}
+        />
+      )}
+
       {/* Bottom Navigation (solo mobile) */}
       <BottomNav
         activeView={activeView}
@@ -348,6 +406,14 @@ function App() {
       <Mascot
         onTaskAdded={taskAddedTrigger}
         onTaskCompleted={taskCompletedTrigger}
+      />
+
+      {/* Focus Mode */}
+      <FocusMode
+        isOpen={showFocusMode}
+        onClose={() => setShowFocusMode(false)}
+        todos={todos}
+        onToggle={toggleTodo}
       />
 
       {/* Footer */}

@@ -1,7 +1,8 @@
 import React from 'react';
-import { Settings as SettingsIcon, Palette, Type, Zap, Bell } from 'lucide-react';
+import { Settings as SettingsIcon, Palette, Type, Zap, Bell, Volume2 } from 'lucide-react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { useNotifications } from '../hooks/useNotifications';
+import { useSoundEffects } from '../hooks/useSoundEffects';
 
 export function Settings() {
   const {
@@ -14,6 +15,7 @@ export function Settings() {
   } = useTheme();
 
   const { permission, requestPermission, isSupported } = useNotifications();
+  const { soundEnabled, toggleSound } = useSoundEffects();
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-6">
@@ -139,6 +141,37 @@ export function Settings() {
           {animationsEnabled
             ? 'Le animazioni sono attive'
             : 'Le animazioni sono disattivate per migliorare le prestazioni'}
+        </p>
+      </div>
+
+      <hr className="border-gray-300 dark:border-gray-600" />
+
+      {/* Effetti Sonori */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Volume2 size={20} className="text-gray-600 dark:text-gray-400" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Effetti Sonori</h3>
+          </div>
+
+          <button
+            onClick={toggleSound}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              soundEnabled ? 'bg-indigo-600' : 'bg-gray-300 dark:bg-gray-600'
+            }`}
+          >
+            <span
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                soundEnabled ? 'translate-x-6' : 'translate-x-1'
+              }`}
+            />
+          </button>
+        </div>
+
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          {soundEnabled
+            ? 'Effetti sonori attivi per completamento, eliminazione e snooze'
+            : 'Effetti sonori disattivati'}
         </p>
       </div>
     </div>
