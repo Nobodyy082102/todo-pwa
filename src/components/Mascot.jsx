@@ -91,26 +91,35 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
   };
 
   return (
-    <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-[9999] pointer-events-none">
+    <div className="fixed top-20 left-6 md:top-24 md:left-8 z-[9999] pointer-events-none">
       <motion.div
-        initial={{ scale: 0, opacity: 0 }}
+        initial={{ scale: 0, opacity: 0, x: -50 }}
         animate={{
           scale: 1,
           opacity: 1,
+          x: 0,
           ...getBodyAnimation()
         }}
         transition={{
-          scale: { type: 'spring', stiffness: 200 },
-          opacity: { duration: 0.3 },
+          scale: {
+            type: 'spring',
+            stiffness: 150,
+            damping: 15,
+            duration: animationType === 'celebrate' ? 0.8 : 1
+          },
+          opacity: { duration: 0.6, ease: "easeOut" },
+          x: { type: 'spring', stiffness: 100, damping: 20 },
           y: {
-            duration: animationType === 'idle' ? 2 : animationType === 'jump' ? 1 : 2,
+            duration: animationType === 'idle' ? 3 : animationType === 'jump' ? 1.2 : 2.5,
             repeat: Infinity,
-            ease: "easeInOut"
+            ease: "easeInOut",
+            repeatType: "reverse"
           },
           rotate: {
-            duration: animationType === 'celebrate' ? 2 : 1,
+            duration: animationType === 'celebrate' ? 2.5 : 1.5,
             repeat: animationType === 'celebrate' ? 3 : 0,
-          },
+            ease: "easeInOut"
+          }
         }}
       >
         {/* Gattino SVG sempre animato */}
@@ -124,8 +133,8 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             fill="currentColor"
             className="text-gray-400 dark:text-gray-700"
             opacity="0.3"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.2, 0.3] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
 
           {/* Corpo del gatto */}
@@ -136,8 +145,12 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             ry="16"
             fill="currentColor"
             className="text-orange-500 dark:text-orange-600"
-            animate={animationType === 'celebrate' ? { scale: [1, 1.1, 1, 1.05, 1] } : {}}
-            transition={{ duration: 0.5, repeat: animationType === 'celebrate' ? 4 : 0 }}
+            animate={animationType === 'celebrate' ? { scale: [1, 1.1, 1, 1.05, 1] } : { scale: [1, 1.02, 1] }}
+            transition={{
+              duration: animationType === 'celebrate' ? 0.8 : 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
           />
 
           {/* Testa */}
@@ -147,11 +160,16 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             r="12"
             fill="currentColor"
             className="text-orange-500 dark:text-orange-600"
-            animate={animationType === 'celebrate' ? { scale: [1, 1.1, 1, 1.05, 1] } : {}}
-            transition={{ duration: 0.5, repeat: animationType === 'celebrate' ? 4 : 0 }}
+            animate={animationType === 'celebrate' ? { scale: [1, 1.1, 1, 1.05, 1] } : { scale: [1, 1.01, 1] }}
+            transition={{
+              duration: animationType === 'celebrate' ? 0.8 : 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.2
+            }}
           />
 
-          {/* Orecchie */}
+          {/* Orecchie fluide */}
           <motion.path
             d="M 22 18 L 18 8 L 26 16 Z"
             fill="currentColor"
@@ -159,8 +177,15 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             animate={animationType !== 'idle' ? {
               rotate: [-5, 5, -5],
               transformOrigin: "22px 18px"
-            } : {}}
-            transition={{ duration: 0.3, repeat: animationType === 'celebrate' ? 3 : 0 }}
+            } : {
+              rotate: [0, -2, 0, -1, 0],
+              transformOrigin: "22px 18px"
+            }}
+            transition={{
+              duration: animationType === 'celebrate' ? 0.5 : 4,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
           />
           <motion.path
             d="M 42 18 L 46 8 L 38 16 Z"
@@ -169,8 +194,16 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             animate={animationType !== 'idle' ? {
               rotate: [5, -5, 5],
               transformOrigin: "42px 18px"
-            } : {}}
-            transition={{ duration: 0.3, repeat: animationType === 'celebrate' ? 3 : 0 }}
+            } : {
+              rotate: [0, 2, 0, 1, 0],
+              transformOrigin: "42px 18px"
+            }}
+            transition={{
+              duration: animationType === 'celebrate' ? 0.5 : 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.3
+            }}
           />
 
           {/* Interno orecchie rosa */}
@@ -193,7 +226,7 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
               ry="4"
               fill="#2d3748"
               animate={{ scaleY: [1, 0.1, 1] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
             />
             <motion.ellipse
               cx="38"
@@ -202,7 +235,7 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
               ry="4"
               fill="#2d3748"
               animate={{ scaleY: [1, 0.1, 1] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
             />
             {/* Pupille */}
             <motion.ellipse
@@ -211,8 +244,8 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
               rx="1.5"
               ry="2.5"
               fill="#10b981"
-              animate={{ scaleY: [1, 0.1, 1] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+              animate={{ scaleY: [1, 0.1, 1], scaleX: [1, 0.8, 1] }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
             />
             <motion.ellipse
               cx="38"
@@ -220,8 +253,8 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
               rx="1.5"
               ry="2.5"
               fill="#10b981"
-              animate={{ scaleY: [1, 0.1, 1] }}
-              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+              animate={{ scaleY: [1, 0.1, 1], scaleX: [1, 0.8, 1] }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4, ease: "easeInOut" }}
             />
           </motion.g>
 
@@ -233,25 +266,25 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             transition={{ duration: 0.3, repeat: animationType === 'celebrate' ? 5 : 0 }}
           />
 
-          {/* Baffi */}
-          <g className="opacity-80">
+          {/* Baffi fluidi */}
+          <g className="opacity-70">
             {/* Sinistra */}
-            <motion.line x1="18" y1="26" x2="10" y2="24" stroke="currentColor" strokeWidth="1" className="text-gray-700 dark:text-gray-300"
-              animate={{ rotate: [0, -2, 0], transformOrigin: "18px 26px" }}
-              transition={{ duration: 2, repeat: Infinity }}
+            <motion.line x1="18" y1="26" x2="10" y2="24" stroke="currentColor" strokeWidth="1.5" className="text-gray-600 dark:text-gray-400"
+              animate={{ rotate: [0, -3, 0, -2, 0], transformOrigin: "18px 26px" }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             />
-            <motion.line x1="18" y1="28" x2="10" y2="30" stroke="currentColor" strokeWidth="1" className="text-gray-700 dark:text-gray-300"
-              animate={{ rotate: [0, 2, 0], transformOrigin: "18px 28px" }}
-              transition={{ duration: 2, repeat: Infinity }}
+            <motion.line x1="18" y1="28" x2="10" y2="30" stroke="currentColor" strokeWidth="1.5" className="text-gray-600 dark:text-gray-400"
+              animate={{ rotate: [0, 3, 0, 2, 0], transformOrigin: "18px 28px" }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             />
             {/* Destra */}
-            <motion.line x1="46" y1="26" x2="54" y2="24" stroke="currentColor" strokeWidth="1" className="text-gray-700 dark:text-gray-300"
-              animate={{ rotate: [0, 2, 0], transformOrigin: "46px 26px" }}
-              transition={{ duration: 2, repeat: Infinity }}
+            <motion.line x1="46" y1="26" x2="54" y2="24" stroke="currentColor" strokeWidth="1.5" className="text-gray-600 dark:text-gray-400"
+              animate={{ rotate: [0, 3, 0, 2, 0], transformOrigin: "46px 26px" }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             />
-            <motion.line x1="46" y1="28" x2="54" y2="30" stroke="currentColor" strokeWidth="1" className="text-gray-700 dark:text-gray-300"
-              animate={{ rotate: [0, -2, 0], transformOrigin: "46px 28px" }}
-              transition={{ duration: 2, repeat: Infinity }}
+            <motion.line x1="46" y1="28" x2="54" y2="30" stroke="currentColor" strokeWidth="1.5" className="text-gray-600 dark:text-gray-400"
+              animate={{ rotate: [0, -3, 0, -2, 0], transformOrigin: "46px 28px" }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             />
           </g>
 
@@ -312,18 +345,19 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             )}
           </motion.g>
 
-          {/* Coda animata (invece della proboscide) */}
+          {/* Coda animata fluida */}
           <motion.path
             stroke="currentColor"
             className="text-orange-600 dark:text-orange-500"
-            strokeWidth="4"
+            strokeWidth="4.5"
             fill="none"
             strokeLinecap="round"
             animate={getTrunkAnimation()}
             transition={{
-              duration: animationType === 'idle' ? 2 : animationType === 'jump' ? 0.8 : 1.5,
+              duration: animationType === 'idle' ? 3.5 : animationType === 'jump' ? 1 : 2,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
+              repeatType: "reverse"
             }}
           />
 
