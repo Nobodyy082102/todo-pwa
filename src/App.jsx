@@ -21,6 +21,14 @@ import { AchievementToast } from './components/AchievementToast';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { ExportPanel } from './components/ExportPanel';
 import { FocusMode } from './components/FocusMode';
+import { VirtualPet } from './components/VirtualPet';
+import { StreakFlame } from './components/StreakFlame';
+import { ActivityHeatmap } from './components/ActivityHeatmap';
+import { SeasonalEffects } from './components/SeasonalEffects';
+import { ThemeCreator } from './components/ThemeCreator';
+import { ZenGarden } from './components/ZenGarden';
+import { VoiceInput } from './components/VoiceInput';
+import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
@@ -89,6 +97,11 @@ function App() {
   const addTodo = (todo) => {
     setTodos([...todos, todo]);
     setTaskAddedTrigger(prev => prev + 1); // Trigger elefantino
+  };
+
+  const addMultipleTodos = (newTodos) => {
+    setTodos([...todos, ...newTodos]);
+    setTaskAddedTrigger(prev => prev + newTodos.length); // Trigger elefantino per ogni task
   };
 
   const toggleTodo = (id) => {
@@ -216,6 +229,9 @@ function App() {
       {/* Particelle ambiente */}
       <AmbientParticles />
 
+      {/* Seasonal Effects */}
+      <SeasonalEffects />
+
       {/* Particelle celebrative */}
       <ParticleEffect trigger={showParticles} type="confetti" />
       {/* Notification Manager - componente invisibile che gestisce le notifiche */}
@@ -282,11 +298,32 @@ function App() {
         {/* Advanced Statistics with Charts */}
         {todos.length > 0 && <AdvancedStats todos={todos} />}
 
+        {/* NEW FEATURES ROW 1 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <VirtualPet todos={todos} />
+          <StreakFlame todos={todos} />
+        </div>
+
+        {/* Heatmap */}
+        <ActivityHeatmap todos={todos} />
+
         {/* Achievement Panel */}
         <AchievementPanel unlockedAchievements={unlockedAchievements} />
 
         {/* Theme Switcher */}
         <ThemeSwitcher />
+
+        {/* Theme Creator */}
+        <ThemeCreator />
+
+        {/* NEW FEATURES ROW 2 - Zen Garden & Energy Tracker */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ZenGarden todos={todos} />
+          <EnergyTracker />
+        </div>
+
+        {/* Voice Input - Brain Dump */}
+        <VoiceInput onTasksCreated={addMultipleTodos} />
 
         {/* Export Panel */}
         <ExportPanel todos={todos} />
