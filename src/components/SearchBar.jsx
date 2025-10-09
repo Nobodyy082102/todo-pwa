@@ -8,7 +8,7 @@ export function SearchBar({ value, onChange, placeholder = 'Cerca attività...' 
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="relative bg-white dark:bg-gray-800 rounded-lg shadow-md"
+      className="relative glass-light dark:glass-dark rounded-2xl shadow-lg hover-glow border border-white/20 dark:border-white/10"
     >
       <div className="relative">
         <Search

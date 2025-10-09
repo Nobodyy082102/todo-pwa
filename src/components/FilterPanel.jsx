@@ -66,7 +66,7 @@ export function FilterPanel({ onFilterChange, activeFilters }) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+    <div className="glass-light dark:glass-dark rounded-2xl shadow-lg overflow-hidden hover-lift border border-white/20 dark:border-white/10">
       {/* Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}

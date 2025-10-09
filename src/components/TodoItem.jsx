@@ -42,9 +42,9 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
-      className={`border-l-4 rounded-lg p-4 shadow-md transition-all hover:shadow-lg ${
+      className={`border-l-4 rounded-xl p-4 shadow-lg transition-all hover-lift glass-light dark:glass-dark border-r border-t border-b border-white/20 dark:border-white/10 ${
         priorityColors[todo.priority]
-      } ${todo.completed ? 'opacity-60' : ''} bg-white dark:bg-gray-800`}
+      } ${todo.completed ? 'opacity-60' : ''}`}
     >
       <div className="flex items-start gap-3">
         <button

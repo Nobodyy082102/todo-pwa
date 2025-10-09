@@ -13,6 +13,8 @@ import { Mascot } from './components/Mascot';
 import { FilterPanel } from './components/FilterPanel';
 import { SearchBar } from './components/SearchBar';
 import { StatsDashboard } from './components/StatsDashboard';
+import { GameStats } from './components/GameStats';
+import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
 import { Download, Upload } from 'lucide-react';
@@ -35,6 +37,7 @@ function App() {
   });
   const [searchQuery, setSearchQuery] = useState('');
   const [sharedTodoNotification, setSharedTodoNotification] = useState(null);
+  const [showParticles, setShowParticles] = useState(false);
 
   // Check for shared TODO in URL on mount
   useEffect(() => {
@@ -62,13 +65,24 @@ function App() {
     if (todo && !todo.completed) {
       // Trigger solo quando completi (non quando de-completi)
       setTaskCompletedTrigger(prev => prev + 1);
-    }
 
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+      // Particelle celebrative!
+      setShowParticles(true);
+      setTimeout(() => setShowParticles(false), 1500);
+
+      // Aggiungi timestamp completamento per stats
+      setTodos(
+        todos.map((t) =>
+          t.id === id ? { ...t, completed: true, completedAt: Date.now() } : t
+        )
+      );
+    } else {
+      setTodos(
+        todos.map((todo) =>
+          todo.id === id ? { ...todo, completed: !todo.completed } : todo
+        )
+      );
+    }
   };
 
   const deleteTodo = (id) => {
@@ -158,7 +172,16 @@ function App() {
   }, [todos, filters, searchQuery]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors relative overflow-visible">
+    <div className="min-h-screen relative overflow-visible">
+      {/* Background gradient animato */}
+      <div className="fixed inset-0 gradient-animated-slow opacity-20 dark:opacity-10 -z-10" />
+      <div className="fixed inset-0 bg-gray-50 dark:bg-gray-900 -z-20" />
+
+      {/* Particelle ambiente */}
+      <AmbientParticles />
+
+      {/* Particelle celebrative */}
+      <ParticleEffect trigger={showParticles} type="confetti" />
       {/* Notification Manager - componente invisibile che gestisce le notifiche */}
       <NotificationManager
         todos={todos}
@@ -188,7 +211,10 @@ function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8 pb-24">
+      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8 pb-24 relative z-10">
+        {/* Game Stats - XP e Livelli */}
+        <GameStats todos={todos} />
+
         {/* Form per aggiungere nuove attività */}
         <TodoForm onAdd={addTodo} />
 

@@ -75,7 +75,7 @@ export function TodoForm({ onAdd }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
       onSubmit={handleSubmit}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 space-y-4"
+      className="glass-light dark:glass-dark rounded-2xl shadow-lg p-6 space-y-4 hover-lift border border-white/20 dark:border-white/10"
     >
       <div>
         <input
