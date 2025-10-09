@@ -4,13 +4,18 @@ import { X } from 'lucide-react';
 export function SidePanel({ isOpen, onClose, children, animationsEnabled }) {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      // Blocca solo lo scroll orizzontale, mantiene quello verticale
+      // In questo modo il gattino rimane visibile
+      document.body.style.overflowX = 'hidden';
+      document.body.style.overflowY = 'auto';
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflowX = '';
+      document.body.style.overflowY = '';
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflowX = '';
+      document.body.style.overflowY = '';
     };
   }, [isOpen]);
 

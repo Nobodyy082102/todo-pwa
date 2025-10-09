@@ -91,7 +91,7 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
   };
 
   return (
-    <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-[100] pointer-events-none">
+    <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-[9999] pointer-events-none">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{
