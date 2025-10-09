@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Plus, Clock, Repeat } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { FloralEffect } from './FloralEffect';
 
 export function TodoForm({ onAdd }) {
   const [title, setTitle] = useState('');
@@ -10,6 +11,9 @@ export function TodoForm({ onAdd }) {
   const [reminderDate, setReminderDate] = useState('');
   const [reminderTime, setReminderTime] = useState('');
   const [recurringHours, setRecurringHours] = useState(24);
+  const [flowerTrigger, setFlowerTrigger] = useState(0);
+  const [flowerPosition, setFlowerPosition] = useState({ x: 0, y: 0 });
+  const formRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -53,20 +57,43 @@ export function TodoForm({ onAdd }) {
     setRecurringHours(24);
   };
 
+  const handlePriorityClick = (p, event) => {
+    setPriority(p);
+
+    // Ottieni la posizione del click relativa al form
+    if (formRef.current) {
+      const rect = formRef.current.getBoundingClientRect();
+      const buttonRect = event.currentTarget.getBoundingClientRect();
+      setFlowerPosition({
+        x: buttonRect.left - rect.left + buttonRect.width / 2,
+        y: buttonRect.top - rect.top + buttonRect.height / 2,
+      });
+      setFlowerTrigger(prev => prev + 1);
+    }
+  };
+
   const priorityColors = {
-    high: 'border-red-500 bg-red-50 dark:bg-red-900/20',
-    medium: 'border-yellow-500 bg-yellow-50 dark:bg-yellow-900/20',
-    low: 'border-green-500 bg-green-50 dark:bg-green-900/20',
+    high: 'border-red-500 bg-gradient-to-br from-red-100 to-pink-100 dark:from-red-900/30 dark:to-pink-900/30 shadow-lg shadow-red-200/50 dark:shadow-red-900/20',
+    medium: 'border-yellow-500 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 shadow-lg shadow-yellow-200/50 dark:shadow-yellow-900/20',
+    low: 'border-green-500 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 shadow-lg shadow-green-200/50 dark:shadow-green-900/20',
+  };
+
+  const priorityLabels = {
+    high: { text: 'Alta', emoji: '🔥' },
+    medium: { text: 'Media', emoji: '⚡' },
+    low: { text: 'Bassa', emoji: '🌿' },
   };
 
   return (
     <motion.form
+      ref={formRef}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       onSubmit={handleSubmit}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-4"
+      className="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-4 overflow-visible"
     >
+      <FloralEffect trigger={flowerTrigger} position={flowerPosition} />
       <div>
         <input
           type="text"
@@ -89,20 +116,23 @@ export function TodoForm({ onAdd }) {
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-3 gap-3">
         {['high', 'medium', 'low'].map((p) => (
-          <button
+          <motion.button
             key={p}
             type="button"
-            onClick={() => setPriority(p)}
-            className={`px-4 py-2 rounded-lg border-2 transition-all ${
+            onClick={(e) => handlePriorityClick(p, e)}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className={`px-4 py-3 rounded-xl border-2 transition-all font-semibold flex items-center justify-center gap-2 ${
               priority === p
-                ? priorityColors[p]
-                : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+                ? priorityColors[p] + ' scale-105'
+                : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800'
             }`}
           >
-            {p === 'high' ? 'Alta' : p === 'medium' ? 'Media' : 'Bassa'}
-          </button>
+            <span className="text-xl">{priorityLabels[p].emoji}</span>
+            <span>{priorityLabels[p].text}</span>
+          </motion.button>
         ))}
       </div>
 

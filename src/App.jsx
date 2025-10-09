@@ -106,7 +106,7 @@ function App() {
   const pendingTodos = todos.filter((todo) => !todo.completed);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 transition-colors">
       {/* Notification Manager - componente invisibile che gestisce le notifiche */}
       <NotificationManager
         todos={todos}
@@ -115,16 +115,16 @@ function App() {
       />
 
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-30">
-        <div className="max-w-4xl mx-auto px-4 py-4">
+      <header className="bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 dark:from-purple-800 dark:via-pink-700 dark:to-indigo-800 shadow-lg sticky top-0 z-30">
+        <div className="max-w-4xl mx-auto px-4 py-5">
           <div className="flex items-center gap-3">
-            <span className="text-4xl">🐘</span>
+            <span className="text-5xl animate-bounce">🌈</span>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Todo PWA
+              <h1 className="text-3xl font-bold text-white drop-shadow-lg">
+                Todo PWA ✨
               </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Gestisci le tue attività con promemoria intelligenti
+              <p className="text-sm text-purple-100 dark:text-purple-200">
+                Gestisci le tue attività con promemoria intelligenti 🎯
               </p>
             </div>
           </div>
@@ -137,17 +137,17 @@ function App() {
         <TodoForm onAdd={addTodo} />
 
         {/* Pulsanti Esporta/Importa */}
-        <div className="flex gap-3 justify-center">
+        <div className="flex gap-3 justify-center flex-wrap">
           <button
             onClick={exportData}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all hover:shadow-lg active:scale-95"
+            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl shadow-lg shadow-blue-300/50 dark:shadow-blue-900/30 transition-all hover:shadow-xl hover:scale-105 active:scale-95 font-semibold"
           >
-            <Download size={18} />
-            <span>Esporta Dati</span>
+            <Download size={20} />
+            <span>💾 Esporta Dati</span>
           </button>
-          <label className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-md transition-all hover:shadow-lg active:scale-95 cursor-pointer">
-            <Upload size={18} />
-            <span>Importa Dati</span>
+          <label className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl shadow-lg shadow-green-300/50 dark:shadow-green-900/30 transition-all hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer font-semibold">
+            <Upload size={20} />
+            <span>📂 Importa Dati</span>
             <input
               type="file"
               accept=".json"
