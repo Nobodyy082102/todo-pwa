@@ -7,7 +7,7 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (onTaskAdded) {
+    if (onTaskAdded > 0) {
       setExpression('smile');
       setMessage('Ottimo lavoro!');
       setShowMessage(true);
@@ -22,7 +22,7 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
   }, [onTaskAdded]);
 
   useEffect(() => {
-    if (onTaskCompleted) {
+    if (onTaskCompleted > 0) {
       setExpression('wave');
       setMessage('Ben fatto! 👏');
       setShowMessage(true);
