@@ -53,34 +53,25 @@ export function useTheme() {
 
   useEffect(() => {
     const theme = THEMES[currentTheme] || THEMES.light;
-    const root = document.documentElement;
+    const html = document.documentElement;
 
     // Rimuovi tutte le classi tema precedenti
     Object.keys(THEMES).forEach(key => {
-      root.classList.remove(`theme-${key}`);
+      html.classList.remove(`theme-${key}`);
     });
-    root.classList.remove('dark');
+    html.classList.remove('dark');
 
-    // Applica la classe del tema corrente
+    // Applica la classe del tema corrente al tag HTML
     if (currentTheme === 'dark') {
-      root.classList.add('dark');
+      html.classList.add('dark');
     }
-    root.classList.add(`theme-${currentTheme}`);
+    html.classList.add(`theme-${currentTheme}`);
 
     // Applica le variabili CSS personalizzate
-    root.style.setProperty('--color-primary', theme.primary);
-    root.style.setProperty('--color-background', theme.background);
-    root.style.setProperty('--color-text', theme.text);
-    root.style.setProperty('--color-card', theme.card);
-
-    // Applica anche i colori al body per i temi colorati
-    if (currentTheme !== 'light' && currentTheme !== 'dark') {
-      document.body.style.backgroundColor = theme.background;
-      document.body.style.color = theme.text;
-    } else {
-      document.body.style.backgroundColor = '';
-      document.body.style.color = '';
-    }
+    html.style.setProperty('--color-primary', theme.primary);
+    html.style.setProperty('--color-background', theme.background);
+    html.style.setProperty('--color-text', theme.text);
+    html.style.setProperty('--color-card', theme.card);
 
     // Applica font size
     const fontSizes = {
@@ -88,13 +79,13 @@ export function useTheme() {
       medium: '16px',
       large: '18px',
     };
-    root.style.setProperty('font-size', fontSizes[fontSize] || fontSizes.medium);
+    html.style.setProperty('font-size', fontSizes[fontSize] || fontSizes.medium);
 
     // Disabilita animazioni se richiesto
     if (!animationsEnabled) {
-      root.style.setProperty('--animation-duration', '0s');
+      html.style.setProperty('--animation-duration', '0s');
     } else {
-      root.style.setProperty('--animation-duration', '0.3s');
+      html.style.setProperty('--animation-duration', '0.3s');
     }
   }, [currentTheme, fontSize, animationsEnabled]);
 

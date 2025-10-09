@@ -4,70 +4,86 @@ import { motion, AnimatePresence } from 'framer-motion';
 export function FloralEffect({ trigger, position }) {
   const [flowers, setFlowers] = useState([]);
 
-  const flowerEmojis = ['🌸', '🌺', '🌻', '🌷', '🌹', '💐', '🏵️', '💮', '🌼', '🪷'];
+  const flowerEmojis = ['🌸', '🌺', '🌻', '🌷', '🌹', '💐', '🏵️', '💮', '🌼', '🪷', '🌿', '✨'];
 
   useEffect(() => {
     if (trigger > 0) {
-      // Crea 12 fiori con posizioni e rotazioni casuali
-      const newFlowers = Array.from({ length: 12 }, (_, i) => ({
-        id: `${Date.now()}-${i}`,
-        emoji: flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)],
-        angle: (360 / 12) * i + Math.random() * 30 - 15,
-        distance: 80 + Math.random() * 40,
-        rotation: Math.random() * 720 - 360,
-        delay: Math.random() * 0.1,
-      }));
+      // Crea 12 fiori in posizioni casuali
+      const newFlowers = Array.from({ length: 12 }, (_, i) => {
+        const angle = (i / 12) * Math.PI * 2;
+        const distance = 80 + Math.random() * 40;
+        const x = Math.cos(angle) * distance;
+        const y = Math.sin(angle) * distance;
+
+        return {
+          id: `${trigger}-${i}`,
+          emoji: flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)],
+          x,
+          y,
+          rotation: Math.random() * 720 - 360,
+          delay: i * 0.03,
+        };
+      });
 
       setFlowers(newFlowers);
 
       // Rimuovi i fiori dopo l'animazione
-      setTimeout(() => setFlowers([]), 1000);
+      const timer = setTimeout(() => {
+        setFlowers([]);
+      }, 2000);
+
+      return () => clearTimeout(timer);
     }
   }, [trigger]);
 
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-visible z-50">
+    <div
+      className="absolute inset-0 pointer-events-none z-50 overflow-visible"
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+      }}
+    >
       <AnimatePresence>
-        {flowers.map((flower) => {
-          const radians = (flower.angle * Math.PI) / 180;
-          const x = Math.cos(radians) * flower.distance;
-          const y = Math.sin(radians) * flower.distance;
-
-          return (
-            <motion.div
-              key={flower.id}
-              initial={{
-                x: position?.x || 0,
-                y: position?.y || 0,
-                scale: 0,
-                rotate: 0,
-                opacity: 1,
-              }}
-              animate={{
-                x: (position?.x || 0) + x,
-                y: (position?.y || 0) + y,
-                scale: [0, 1.5, 1],
-                rotate: flower.rotation,
-                opacity: [1, 1, 0],
-              }}
-              exit={{ opacity: 0, scale: 0 }}
-              transition={{
-                duration: 0.8,
-                delay: flower.delay,
-                ease: "easeOut",
-              }}
-              className="absolute text-3xl"
-              style={{
-                left: '50%',
-                top: '50%',
-                marginLeft: '-0.75rem',
-                marginTop: '-0.75rem',
-              }}
-            >
-              {flower.emoji}
-            </motion.div>
-          );
-        })}
+        {flowers.map((flower) => (
+          <motion.div
+            key={flower.id}
+            initial={{
+              x: position.x,
+              y: position.y,
+              scale: 0,
+              opacity: 1,
+              rotate: 0,
+            }}
+            animate={{
+              x: position.x + flower.x,
+              y: position.y + flower.y,
+              scale: [0, 1.5, 1],
+              opacity: [1, 1, 0],
+              rotate: flower.rotation,
+            }}
+            exit={{
+              opacity: 0,
+              scale: 0,
+            }}
+            transition={{
+              duration: 1.5,
+              delay: flower.delay,
+              ease: [0.34, 1.56, 0.64, 1],
+            }}
+            style={{
+              position: 'absolute',
+              fontSize: '2rem',
+              zIndex: 9999,
+              pointerEvents: 'none',
+            }}
+          >
+            {flower.emoji}
+          </motion.div>
+        ))}
       </AnimatePresence>
     </div>
   );
