@@ -5,9 +5,26 @@ class SoundEffects {
   constructor() {
     this.audioContext = null;
     this.enabled = true;
-
-    // Initialize on first user interaction to comply with browser policies
     this.initialized = false;
+    this.userInteracted = false;
+
+    // Setup user interaction listener
+    this.setupUserInteractionListener();
+  }
+
+  setupUserInteractionListener() {
+    const resumeContext = () => {
+      if (!this.userInteracted && this.audioContext) {
+        this.audioContext.resume().then(() => {
+          this.userInteracted = true;
+        });
+      }
+    };
+
+    // Listen for first user interaction
+    ['click', 'touchstart', 'keydown'].forEach(event => {
+      document.addEventListener(event, resumeContext, { once: true });
+    });
   }
 
   init() {
@@ -16,6 +33,11 @@ class SoundEffects {
     try {
       this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
       this.initialized = true;
+
+      // Resume immediately if user has already interacted
+      if (this.userInteracted && this.audioContext.state === 'suspended') {
+        this.audioContext.resume();
+      }
     } catch (e) {
       console.warn('Web Audio API not supported');
       this.enabled = false;
