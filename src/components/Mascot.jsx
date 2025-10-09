@@ -7,7 +7,7 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
   const [showReminder, setShowReminder] = useState(false);
   const [reminderMessage, setReminderMessage] = useState('');
 
-  // Messaggi promemoria casuali
+  // Messaggi promemoria casuali - ESTESI!
   const reminderMessages = [
     "Hai attività in sospeso! 📝",
     "Ricorda di completare i tuoi task! ✨",
@@ -19,30 +19,50 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
     "Ogni attività completata è una vittoria! 🏆",
     "Mantieni il focus! 🎯",
     "Sei a un passo dal successo! ⭐",
+    "Non dimenticare i tuoi obiettivi! 🎪",
+    "Oggi è il giorno perfetto! ☀️",
+    "Inizia da quella più facile! 🌱",
+    "Un task alla volta! 🐾",
+    "Sei sulla strada giusta! 🛤️",
+    "Credici, puoi farcela! 💫",
+    "Non procrastinare, agisci! ⚡",
+    "Le tue priorità ti aspettano! 🔥",
+    "Completiamo qualcosa oggi! 💯",
+    "Il successo è fatto di piccoli passi! 👣",
+    "Lavora con metodo! 📊",
+    "Resta concentrato sull'obiettivo! 🎯",
+    "Ogni sforzo conta! 💎",
+    "Fai la differenza oggi! 🌟",
+    "Trasforma i sogni in realtà! 🦋",
+    "Il tempo è prezioso, usalo bene! ⏰",
+    "Sei più forte di quanto pensi! 💪",
+    "Progressi, non perfezione! 📈",
+    "Inizia ora, ringrazia dopo! 🙏",
+    "Le piccole vittorie contano! 🏅",
   ];
 
-  // Sistema di promemoria casuali (ogni 2-4 minuti)
+  // Sistema di promemoria casuali PIÙ FREQUENTI (ogni 1-2 minuti)
   useEffect(() => {
     const showRandomReminder = () => {
       const randomMessage = reminderMessages[Math.floor(Math.random() * reminderMessages.length)];
       setReminderMessage(randomMessage);
       setShowReminder(true);
 
-      // Nascondi dopo 5 secondi
+      // Nascondi dopo 6 secondi (più tempo per leggere)
       setTimeout(() => {
         setShowReminder(false);
-      }, 5000);
+      }, 6000);
     };
 
-    // Primo promemoria dopo 2 minuti
+    // Primo promemoria dopo 1 minuto
     const firstTimer = setTimeout(() => {
       showRandomReminder();
-    }, 120000); // 2 minuti
+    }, 60000); // 1 minuto
 
-    // Promemoria successivi ogni 3 minuti
+    // Promemoria successivi ogni 90 secondi (1.5 minuti)
     const interval = setInterval(() => {
       showRandomReminder();
-    }, 180000); // 3 minuti
+    }, 90000); // 1.5 minuti
 
     return () => {
       clearTimeout(firstTimer);
@@ -83,20 +103,21 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
     switch (animationType) {
       case 'jump':
         return {
-          y: [0, -25, -12, -25, 0],
-          rotate: [0, -8, 8, -8, 0],
-          scale: [1, 1.12, 1.06, 1.12, 1],
+          y: [0, -30, -15, -28, -12, -25, 0],
+          rotate: [0, -10, 8, -6, 8, -8, 0],
+          scale: [1, 1.15, 1.08, 1.12, 1.06, 1.10, 1],
         };
       case 'celebrate':
         return {
-          rotate: [0, -18, 18, -18, 18, -12, 12, 0],
-          scale: [1, 1.18, 1, 1.18, 1, 1.12, 1],
-          y: [0, -12, 0, -8, 0],
+          rotate: [0, -20, 20, -18, 18, -15, 15, -10, 10, 0],
+          scale: [1, 1.20, 1.05, 1.18, 1, 1.15, 1, 1.12, 1.05, 1],
+          y: [0, -15, 0, -12, 0, -8, 0, -5, 0],
         };
       default: // idle
         return {
-          y: [0, -4, 0],
-          scale: [1, 1.03, 1],
+          y: [0, -5, -2, -4, 0],
+          scale: [1, 1.04, 1.02, 1.03, 1],
+          rotate: [0, -1, 0.5, -0.5, 0],
         };
     }
   };
@@ -147,21 +168,21 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
         transition={{
           scale: {
             type: 'spring',
-            stiffness: 180,
-            damping: 18,
-            duration: animationType === 'celebrate' ? 0.7 : 0.9
+            stiffness: 200,
+            damping: 20,
+            duration: animationType === 'celebrate' ? 0.6 : 0.8
           },
-          opacity: { duration: 0.6, ease: "easeOut" },
-          x: { type: 'spring', stiffness: 120, damping: 22 },
+          opacity: { duration: 0.5, ease: "easeOut" },
+          x: { type: 'spring', stiffness: 140, damping: 24 },
           y: {
-            duration: animationType === 'idle' ? 3.5 : animationType === 'jump' ? 1.3 : 2.2,
+            duration: animationType === 'idle' ? 4 : animationType === 'jump' ? 1.5 : 2.5,
             repeat: Infinity,
             ease: "easeInOut",
             repeatType: "reverse"
           },
           rotate: {
-            duration: animationType === 'celebrate' ? 2.2 : 1.8,
-            repeat: animationType === 'celebrate' ? 3 : 0,
+            duration: animationType === 'idle' ? 4 : animationType === 'celebrate' ? 2.5 : 1.5,
+            repeat: Infinity,
             ease: "easeInOut"
           }
         }}
@@ -181,93 +202,95 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Corpo arancione con pancia bianca */}
+          {/* Corpo arancione vibrante con pancia bianca */}
           <motion.ellipse
             cx="32"
             cy="38"
             rx="14"
             ry="16"
-            fill="#FF8C42"
-            animate={animationType === 'celebrate' ? { scale: [1, 1.12, 1, 1.06, 1] } : { scale: [1, 1.03, 1] }}
+            fill="#FF9A56"
+            animate={animationType === 'celebrate' ? { scale: [1, 1.12, 1, 1.06, 1] } : { scale: [1, 1.04, 1.01, 1.03, 1] }}
             transition={{
-              duration: animationType === 'celebrate' ? 0.7 : 3.5,
+              duration: animationType === 'celebrate' ? 0.7 : 4,
               repeat: Infinity,
               ease: "easeInOut"
             }}
           />
 
-          {/* Pancia bianca */}
+          {/* Pancia bianca cremosa */}
           <motion.ellipse
             cx="32"
             cy="40"
             rx="10"
             ry="13"
-            fill="#FFFFFF"
-            animate={animationType === 'celebrate' ? { scale: [1, 1.1, 1, 1.05, 1] } : { scale: [1, 1.02, 1] }}
+            fill="#FFF8F0"
+            animate={animationType === 'celebrate' ? { scale: [1, 1.1, 1, 1.05, 1] } : { scale: [1, 1.03, 1.01, 1.02, 1] }}
             transition={{
-              duration: animationType === 'celebrate' ? 0.7 : 3.5,
+              duration: animationType === 'celebrate' ? 0.7 : 4,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: 0.1
+              delay: 0.15
             }}
           />
 
-          {/* Testa arancione */}
+          {/* Testa arancione vibrante */}
           <motion.circle
             cx="32"
             cy="24"
             r="13"
-            fill="#FF8C42"
-            animate={animationType === 'celebrate' ? { scale: [1, 1.12, 1, 1.06, 1] } : { scale: [1, 1.02, 1] }}
+            fill="#FF9A56"
+            animate={animationType === 'celebrate' ? { scale: [1, 1.12, 1, 1.06, 1] } : { scale: [1, 1.03, 1.01, 1.02, 1] }}
             transition={{
-              duration: animationType === 'celebrate' ? 0.7 : 3.5,
+              duration: animationType === 'celebrate' ? 0.7 : 4,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: 0.2
+              delay: 0.25
             }}
           />
 
-          {/* Strisce tigrate arancione scuro sulla testa */}
-          <path d="M 24 18 Q 26 16 28 18" stroke="#E67529" strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.7"/>
-          <path d="M 36 18 Q 38 16 40 18" stroke="#E67529" strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.7"/>
-          <path d="M 28 22 Q 30 20 32 22" stroke="#E67529" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.6"/>
-          <path d="M 32 22 Q 34 20 36 22" stroke="#E67529" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.6"/>
+          {/* Strisce tigrate arancione scuro sulla testa - PIÙ MARCATE */}
+          <path d="M 24 18 Q 26 16 28 18" stroke="#D96528" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.8"/>
+          <path d="M 36 18 Q 38 16 40 18" stroke="#D96528" strokeWidth="2" fill="none" strokeLinecap="round" opacity="0.8"/>
+          <path d="M 28 22 Q 30 20 32 22" stroke="#D96528" strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.75"/>
+          <path d="M 32 22 Q 34 20 36 22" stroke="#D96528" strokeWidth="1.8" fill="none" strokeLinecap="round" opacity="0.75"/>
+          <path d="M 22 20 Q 23 19 24 20" stroke="#D96528" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.6"/>
+          <path d="M 40 20 Q 41 19 42 20" stroke="#D96528" strokeWidth="1.5" fill="none" strokeLinecap="round" opacity="0.6"/>
 
-          {/* Muso bianco */}
-          <circle cx="32" cy="27" r="7" fill="#FFFFFF"/>
+          {/* Muso bianco cremoso */}
+          <circle cx="32" cy="27" r="7" fill="#FFF8F0"/>
 
-          {/* Orecchie arancioni fluide */}
+          {/* Orecchie arancioni fluide e reattive */}
           <motion.path
             d="M 21 17 L 16 6 L 26 15 Z"
-            fill="#FF8C42"
+            fill="#FF9A56"
             animate={animationType !== 'idle' ? {
-              rotate: [-8, 8, -8],
+              rotate: [-10, 10, -8, 8, -10],
               transformOrigin: "21px 17px"
             } : {
-              rotate: [0, -3, 0, -2, 0],
+              rotate: [0, -4, 0, -2.5, -1, 0],
               transformOrigin: "21px 17px"
             }}
             transition={{
-              duration: animationType === 'celebrate' ? 0.6 : 4.5,
+              duration: animationType === 'celebrate' ? 0.5 : 5,
               repeat: Infinity,
               ease: "easeInOut"
             }}
           />
           <motion.path
             d="M 43 17 L 48 6 L 38 15 Z"
-            fill="#FF8C42"
+            fill="#FF9A56"
             animate={animationType !== 'idle' ? {
-              rotate: [8, -8, 8],
+              rotate: [10, -10, 8, -8, 10],
               transformOrigin: "43px 17px"
             } : {
-              rotate: [0, 3, 0, 2, 0],
+              rotate: [0, 4, 0, 2.5, 1, 0],
               transformOrigin: "43px 17px"
             }}
             transition={{
-              duration: animationType === 'celebrate' ? 0.6 : 4.5,
+              duration: animationType === 'celebrate' ? 0.5 : 5,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: 0.3
+              delay: 0.4
             }}
           />
 
@@ -283,47 +306,49 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             } : {}}
             transition={{ duration: 0.6, repeat: animationType === 'celebrate' ? 4 : 0 }}
           >
-            {/* Occhi ambra */}
+            {/* Occhi VERDI smeraldo */}
             <motion.ellipse
               cx="26"
               cy="23"
               rx="3.5"
               ry="5"
-              fill="#FFA500"
+              fill="#10B981"
               animate={{ scaleY: [1, 0.08, 1] }}
-              transition={{ duration: 0.18, repeat: Infinity, repeatDelay: 4.2, ease: "easeInOut" }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4.5, ease: "easeInOut" }}
             />
             <motion.ellipse
               cx="38"
               cy="23"
               rx="3.5"
               ry="5"
-              fill="#FFA500"
+              fill="#10B981"
               animate={{ scaleY: [1, 0.08, 1] }}
-              transition={{ duration: 0.18, repeat: Infinity, repeatDelay: 4.2, ease: "easeInOut" }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4.5, ease: "easeInOut" }}
             />
-            {/* Pupille a fessura verticale */}
+            {/* Pupille a fessura verticale nere */}
             <motion.ellipse
               cx="26"
               cy="23"
               rx="1"
-              ry="3.5"
-              fill="#1a1a1a"
-              animate={{ scaleY: [1, 0.08, 1] }}
-              transition={{ duration: 0.18, repeat: Infinity, repeatDelay: 4.2, ease: "easeInOut" }}
+              ry="3.8"
+              fill="#000000"
+              animate={{ scaleY: [1, 0.08, 1], ry: [3.8, 0.3, 3.8] }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4.5, ease: "easeInOut" }}
             />
             <motion.ellipse
               cx="38"
               cy="23"
               rx="1"
-              ry="3.5"
-              fill="#1a1a1a"
-              animate={{ scaleY: [1, 0.08, 1] }}
-              transition={{ duration: 0.18, repeat: Infinity, repeatDelay: 4.2, ease: "easeInOut" }}
+              ry="3.8"
+              fill="#000000"
+              animate={{ scaleY: [1, 0.08, 1], ry: [3.8, 0.3, 3.8] }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 4.5, ease: "easeInOut" }}
             />
-            {/* Riflessi luminosi */}
-            <circle cx="27" cy="21.5" r="1" fill="white" opacity="0.8"/>
-            <circle cx="39" cy="21.5" r="1" fill="white" opacity="0.8"/>
+            {/* Riflessi luminosi brillanti */}
+            <circle cx="27" cy="21.5" r="1.2" fill="white" opacity="0.9"/>
+            <circle cx="39" cy="21.5" r="1.2" fill="white" opacity="0.9"/>
+            <circle cx="25.5" cy="24" r="0.6" fill="white" opacity="0.6"/>
+            <circle cx="37.5" cy="24" r="0.6" fill="white" opacity="0.6"/>
           </motion.g>
 
           {/* Naso rosa a triangolo */}
@@ -334,33 +359,57 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             transition={{ duration: 0.35, repeat: animationType === 'celebrate' ? 5 : 0 }}
           />
 
-          {/* Baffi più lunghi e realistici */}
-          <g className="opacity-80">
-            {/* Sinistra - 3 baffi */}
-            <motion.line x1="16" y1="27" x2="6" y2="25" stroke="#555555" strokeWidth="1.2" strokeLinecap="round"
-              animate={{ rotate: [0, -4, 0, -2.5, 0], transformOrigin: "16px 27px" }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          {/* Baffi SUPER LUNGHI e realistici con movimento fluido */}
+          <g className="opacity-85">
+            {/* Sinistra - 3 baffi ultra fluidi */}
+            <motion.line x1="16" y1="27" x2="4" y2="24" stroke="#444444" strokeWidth="1.3" strokeLinecap="round"
+              animate={{
+                rotate: [0, -5, -1, -4, 0, -3, 0],
+                transformOrigin: "16px 27px",
+                x2: [4, 3, 4, 3.5, 4]
+              }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
             />
-            <motion.line x1="16" y1="29" x2="5" y2="29" stroke="#555555" strokeWidth="1.2" strokeLinecap="round"
-              animate={{ rotate: [0, -2, 0, -1, 0], transformOrigin: "16px 29px" }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+            <motion.line x1="16" y1="29" x2="3" y2="29" stroke="#444444" strokeWidth="1.3" strokeLinecap="round"
+              animate={{
+                rotate: [0, -3, 0, -2, -1, 0],
+                transformOrigin: "16px 29px",
+                x2: [3, 2, 3, 2.5, 3]
+              }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.4 }}
             />
-            <motion.line x1="16" y1="31" x2="6" y2="33" stroke="#555555" strokeWidth="1.2" strokeLinecap="round"
-              animate={{ rotate: [0, 4, 0, 2.5, 0], transformOrigin: "16px 31px" }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+            <motion.line x1="16" y1="31" x2="5" y2="34" stroke="#444444" strokeWidth="1.3" strokeLinecap="round"
+              animate={{
+                rotate: [0, 5, 1, 4, 0, 3, 0],
+                transformOrigin: "16px 31px",
+                x2: [5, 4, 5, 4.5, 5]
+              }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
             />
-            {/* Destra - 3 baffi */}
-            <motion.line x1="48" y1="27" x2="58" y2="25" stroke="#555555" strokeWidth="1.2" strokeLinecap="round"
-              animate={{ rotate: [0, 4, 0, 2.5, 0], transformOrigin: "48px 27px" }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            {/* Destra - 3 baffi ultra fluidi */}
+            <motion.line x1="48" y1="27" x2="60" y2="24" stroke="#444444" strokeWidth="1.3" strokeLinecap="round"
+              animate={{
+                rotate: [0, 5, 1, 4, 0, 3, 0],
+                transformOrigin: "48px 27px",
+                x2: [60, 61, 60, 60.5, 60]
+              }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
             />
-            <motion.line x1="48" y1="29" x2="59" y2="29" stroke="#555555" strokeWidth="1.2" strokeLinecap="round"
-              animate={{ rotate: [0, 2, 0, 1, 0], transformOrigin: "48px 29px" }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+            <motion.line x1="48" y1="29" x2="61" y2="29" stroke="#444444" strokeWidth="1.3" strokeLinecap="round"
+              animate={{
+                rotate: [0, 3, 0, 2, 1, 0],
+                transformOrigin: "48px 29px",
+                x2: [61, 62, 61, 61.5, 61]
+              }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
             />
-            <motion.line x1="48" y1="31" x2="58" y2="33" stroke="#555555" strokeWidth="1.2" strokeLinecap="round"
-              animate={{ rotate: [0, -4, 0, -2.5, 0], transformOrigin: "48px 31px" }}
-              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+            <motion.line x1="48" y1="31" x2="59" y2="34" stroke="#444444" strokeWidth="1.3" strokeLinecap="round"
+              animate={{
+                rotate: [0, -5, -1, -4, 0, -3, 0],
+                transformOrigin: "48px 31px",
+                x2: [59, 60, 59, 59.5, 59]
+              }}
+              transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             />
           </g>
 
@@ -421,44 +470,53 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             )}
           </motion.g>
 
-          {/* Coda arancione animata super fluida */}
+          {/* Coda arancione animata ULTRA FLUIDA */}
           <motion.path
-            stroke="#FF8C42"
-            strokeWidth="5.5"
+            stroke="#FF9A56"
+            strokeWidth="5.8"
             fill="none"
             strokeLinecap="round"
             animate={getTailAnimation()}
             transition={{
-              duration: animationType === 'idle' ? 4 : animationType === 'jump' ? 1.2 : 2.2,
+              duration: animationType === 'idle' ? 4.5 : animationType === 'jump' ? 1.3 : 2.4,
               repeat: Infinity,
               ease: "easeInOut",
               repeatType: "reverse"
             }}
           />
-          {/* Punta coda bianca */}
+          {/* Punta coda bianca cremosa */}
           <motion.circle
             cx="4"
             cy="30"
-            r="3"
-            fill="#FFFFFF"
+            r="3.2"
+            fill="#FFF8F0"
             animate={{
-              x: animationType === 'idle' ? [0, -1, 0] : animationType === 'jump' ? [-2, 2, -2] : [-3, 3, -3],
-              y: animationType === 'idle' ? [0, -1, 0] : [-2, 2, -2]
+              x: animationType === 'idle' ? [0, -1.5, 0, -0.8, 0] : animationType === 'jump' ? [-3, 3, -2, 3, -3] : [-4, 4, -3, 4, -4],
+              y: animationType === 'idle' ? [0, -1.5, 0, -0.8, 0] : [-3, 3, -2, 3, -3],
+              scale: [1, 1.05, 1, 1.03, 1]
             }}
             transition={{
-              duration: animationType === 'idle' ? 4 : animationType === 'jump' ? 1.2 : 2.2,
+              duration: animationType === 'idle' ? 4.5 : animationType === 'jump' ? 1.3 : 2.4,
               repeat: Infinity,
               ease: "easeInOut",
               repeatType: "reverse"
             }}
           />
 
-          {/* Zampe arancioni con cuscinetti bianchi */}
-          <motion.g>
-            <ellipse cx="26" cy="50" rx="3.5" ry="4.5" fill="#FF8C42"/>
-            <ellipse cx="38" cy="50" rx="3.5" ry="4.5" fill="#FF8C42"/>
-            <ellipse cx="26" cy="51" rx="2.5" ry="3" fill="#FFB6C1"/>
-            <ellipse cx="38" cy="51" rx="2.5" ry="3" fill="#FFB6C1"/>
+          {/* Zampe arancioni con cuscinetti rosa animati */}
+          <motion.g
+            animate={{ y: animationType === 'idle' ? [0, 0.5, 0] : [0, -1, 0] }}
+            transition={{ duration: animationType === 'idle' ? 4 : 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <ellipse cx="26" cy="50" rx="3.5" ry="4.5" fill="#FF9A56"/>
+            <ellipse cx="38" cy="50" rx="3.5" ry="4.5" fill="#FF9A56"/>
+            <ellipse cx="26" cy="51" rx="2.5" ry="3" fill="#FFB6C1" opacity="0.9"/>
+            <ellipse cx="38" cy="51" rx="2.5" ry="3" fill="#FFB6C1" opacity="0.9"/>
+            {/* Mini cuscinetti */}
+            <circle cx="24.5" cy="49.5" r="0.8" fill="#FFB6C1" opacity="0.8"/>
+            <circle cx="27.5" cy="49.5" r="0.8" fill="#FFB6C1" opacity="0.8"/>
+            <circle cx="36.5" cy="49.5" r="0.8" fill="#FFB6C1" opacity="0.8"/>
+            <circle cx="39.5" cy="49.5" r="0.8" fill="#FFB6C1" opacity="0.8"/>
           </motion.g>
 
           {/* Particelle celebrative colorate */}
