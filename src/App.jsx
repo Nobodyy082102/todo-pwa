@@ -7,11 +7,15 @@ import { FloatingActionButton } from './components/FloatingActionButton';
 import { SidePanel } from './components/SidePanel';
 import { Settings } from './components/Settings';
 import { NotificationManager } from './components/NotificationManager';
+import { BottomNav } from './components/BottomNav';
+import { OnlineStatus } from './components/OnlineStatus';
 import { Download, Upload } from 'lucide-react';
 
 function App() {
   const [todos, setTodos] = useLocalStorage('todos', []);
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [activeView, setActiveView] = useState('active');
+  const [showSettings, setShowSettings] = useState(false);
   const { animationsEnabled } = useTheme();
 
   const addTodo = (todo) => {
@@ -106,7 +110,7 @@ function App() {
   const pendingTodos = todos.filter((todo) => !todo.completed);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-100 dark:from-gray-900 dark:via-purple-900/20 dark:to-indigo-900/20 transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Notification Manager - componente invisibile che gestisce le notifiche */}
       <NotificationManager
         todos={todos}
@@ -115,17 +119,21 @@ function App() {
       />
 
       {/* Header */}
-      <header className="bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 dark:from-purple-800 dark:via-pink-700 dark:to-indigo-800 shadow-lg sticky top-0 z-30">
-        <div className="max-w-4xl mx-auto px-4 py-5">
-          <div className="flex items-center gap-3">
-            <span className="text-5xl animate-bounce">🌈</span>
+      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-30 shadow-sm">
+        <div className="max-w-4xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white drop-shadow-lg">
-                Todo PWA ✨
+              <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
+                Task Manager
               </h1>
-              <p className="text-sm text-purple-100 dark:text-purple-200">
-                Gestisci le tue attività con promemoria intelligenti 🎯
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                Gestisci le tue attività in modo efficiente
               </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                {pendingTodos.length} attive
+              </span>
             </div>
           </div>
         </div>
@@ -140,14 +148,14 @@ function App() {
         <div className="flex gap-3 justify-center flex-wrap">
           <button
             onClick={exportData}
-            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl shadow-lg shadow-blue-300/50 dark:shadow-blue-900/30 transition-all hover:shadow-xl hover:scale-105 active:scale-95 font-semibold"
+            className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg shadow-sm transition-all font-medium"
           >
-            <Download size={20} />
-            <span>💾 Esporta Dati</span>
+            <Download size={18} />
+            <span>Esporta</span>
           </button>
-          <label className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl shadow-lg shadow-green-300/50 dark:shadow-green-900/30 transition-all hover:shadow-xl hover:scale-105 active:scale-95 cursor-pointer font-semibold">
-            <Upload size={20} />
-            <span>📂 Importa Dati</span>
+          <label className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg shadow-sm transition-all cursor-pointer font-medium">
+            <Upload size={18} />
+            <span>Importa</span>
             <input
               type="file"
               accept=".json"
@@ -214,10 +222,32 @@ function App() {
         </div>
       </SidePanel>
 
+      {/* Online Status Indicator */}
+      <OnlineStatus />
+
+      {/* Bottom Navigation (solo mobile) */}
+      <BottomNav
+        activeView={activeView}
+        onAddClick={() => {
+          setActiveView('add');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onListClick={(view) => {
+          setActiveView(view);
+          if (view === 'completed') {
+            setIsPanelOpen(true);
+          }
+        }}
+        onSettingsClick={() => {
+          setActiveView('settings');
+          setShowSettings(!showSettings);
+        }}
+      />
+
       {/* Footer */}
-      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-16">
+      <footer className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-16 mb-16 md:mb-0">
         <div className="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-gray-600 dark:text-gray-400">
-          <p>🐘 Todo PWA - Installabile come app su desktop e mobile</p>
+          <p>Task Manager - Funziona offline</p>
         </div>
       </footer>
     </div>

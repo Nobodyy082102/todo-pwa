@@ -4,45 +4,31 @@ import { useLocalStorage } from './useLocalStorage';
 export const THEMES = {
   light: {
     name: 'Chiaro',
-    primary: '#4F46E5',
+    primary: '#2563eb',
     background: '#ffffff',
-    text: '#1f2937',
+    text: '#111827',
     card: '#f9fafb',
   },
   dark: {
     name: 'Scuro',
-    primary: '#818CF8',
+    primary: '#60a5fa',
     background: '#111827',
     text: '#f9fafb',
     card: '#1f2937',
   },
   ocean: {
     name: 'Oceano',
-    primary: '#0EA5E9',
+    primary: '#0284c7',
     background: '#f0f9ff',
     text: '#0c4a6e',
     card: '#e0f2fe',
   },
-  sunset: {
-    name: 'Tramonto',
-    primary: '#F59E0B',
-    background: '#fffbeb',
-    text: '#78350f',
-    card: '#fef3c7',
-  },
-  forest: {
-    name: 'Foresta',
-    primary: '#10B981',
-    background: '#f0fdf4',
-    text: '#064e3b',
-    card: '#d1fae5',
-  },
-  purple: {
-    name: 'Viola',
-    primary: '#A855F7',
-    background: '#faf5ff',
-    text: '#581c87',
-    card: '#f3e8ff',
+  slate: {
+    name: 'Ardesia',
+    primary: '#475569',
+    background: '#f8fafc',
+    text: '#0f172a',
+    card: '#f1f5f9',
   },
 };
 

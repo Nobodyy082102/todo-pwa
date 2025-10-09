@@ -1,14 +1,15 @@
 {
-  "name": "Todo PWA - Gestione Attività",
-  "short_name": "TodoPWA",
-  "description": "App per gestire to-do list con notifiche persistenti",
-  "theme_color": "#4F46E5",
+  "name": "Task Manager - Gestione Professionale",
+  "short_name": "TaskManager",
+  "description": "Gestione professionale delle attività con supporto offline completo e notifiche intelligenti",
+  "theme_color": "#2563eb",
   "background_color": "#ffffff",
   "display": "standalone",
   "scope": "/todo-pwa/",
   "start_url": "/todo-pwa/",
-  "orientation": "portrait-primary",
-  "categories": ["productivity", "utilities"],
+  "orientation": "any",
+  "categories": ["productivity", "business", "utilities"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/todo-pwa/pwa-192x192.png",

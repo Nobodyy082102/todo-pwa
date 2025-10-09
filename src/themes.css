@@ -1,150 +1,59 @@
-/* Temi colorati - Sistema aggressivo che sovrascrive Tailwind */
+/* Temi professionali - Stili puliti e sobri */
 
 /* === TEMA OCEANO === */
 html.theme-ocean {
-  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%) !important;
+  background: #f0f9ff !important;
 }
 
-html.theme-ocean body {
-  background: transparent !important;
+.theme-ocean .bg-gray-50 {
+  background-color: #f0f9ff !important;
 }
 
 .theme-ocean .bg-white,
-.theme-ocean .dark\:bg-gray-800,
-.theme-ocean [class*="bg-white"],
-.theme-ocean [class*="bg-gray"] {
-  background-color: #f0f9ff !important;
-  background-image: none !important;
+.theme-ocean .dark\:bg-gray-800 {
+  background-color: #ffffff !important;
+  border-color: #e0f2fe !important;
 }
 
-.theme-ocean .text-gray-900,
-.theme-ocean .dark\:text-white,
-.theme-ocean h1, .theme-ocean h2, .theme-ocean h3 {
-  color: #0c4a6e !important;
-}
-
-.theme-ocean .text-gray-600,
-.theme-ocean .dark\:text-gray-400 {
-  color: #0369a1 !important;
-}
-
-/* === TEMA TRAMONTO === */
-html.theme-sunset {
-  background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%) !important;
-}
-
-html.theme-sunset body {
-  background: transparent !important;
-}
-
-.theme-sunset .bg-white,
-.theme-sunset .dark\:bg-gray-800,
-.theme-sunset [class*="bg-white"],
-.theme-sunset [class*="bg-gray"] {
-  background-color: #fffbeb !important;
-  background-image: none !important;
-}
-
-.theme-sunset .text-gray-900,
-.theme-sunset .dark\:text-white,
-.theme-sunset h1, .theme-sunset h2, .theme-sunset h3 {
-  color: #78350f !important;
-}
-
-.theme-sunset .text-gray-600,
-.theme-sunset .dark\:text-gray-400 {
-  color: #92400e !important;
-}
-
-/* === TEMA FORESTA === */
-html.theme-forest {
-  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
-}
-
-html.theme-forest body {
-  background: transparent !important;
-}
-
-.theme-forest .bg-white,
-.theme-forest .dark\:bg-gray-800,
-.theme-forest [class*="bg-white"],
-.theme-forest [class*="bg-gray"] {
-  background-color: #f0fdf4 !important;
-  background-image: none !important;
-}
-
-.theme-forest .text-gray-900,
-.theme-forest .dark\:text-white,
-.theme-forest h1, .theme-forest h2, .theme-forest h3 {
-  color: #14532d !important;
-}
-
-.theme-forest .text-gray-600,
-.theme-forest .dark\:text-gray-400 {
-  color: #15803d !important;
-}
-
-/* === TEMA VIOLA === */
-html.theme-purple {
-  background: linear-gradient(135deg, #fae8ff 0%, #e9d5ff 100%) !important;
-}
-
-html.theme-purple body {
-  background: transparent !important;
-}
-
-.theme-purple .bg-white,
-.theme-purple .dark\:bg-gray-800,
-.theme-purple [class*="bg-white"],
-.theme-purple [class*="bg-gray"] {
-  background-color: #faf5ff !important;
-  background-image: none !important;
-}
-
-.theme-purple .text-gray-900,
-.theme-purple .dark\:text-white,
-.theme-purple h1, .theme-purple h2, .theme-purple h3 {
-  color: #581c87 !important;
-}
-
-.theme-purple .text-gray-600,
-.theme-purple .dark\:text-gray-400 {
-  color: #7e22ce !important;
-}
-
-/* === FIX HEADER PER TEMI COLORATI === */
-.theme-ocean header,
-.theme-sunset header,
-.theme-forest header,
-.theme-purple header {
-  opacity: 0.95;
-}
-
-/* === FIX INPUT E TEXTAREA === */
 .theme-ocean input,
 .theme-ocean textarea,
 .theme-ocean select {
-  background-color: #e0f2fe !important;
+  background-color: #ffffff !important;
+  border-color: #bae6fd !important;
   color: #0c4a6e !important;
 }
 
-.theme-sunset input,
-.theme-sunset textarea,
-.theme-sunset select {
-  background-color: #fef3c7 !important;
-  color: #78350f !important;
+.theme-ocean input:focus,
+.theme-ocean textarea:focus,
+.theme-ocean select:focus {
+  border-color: #0284c7 !important;
 }
 
-.theme-forest input,
-.theme-forest textarea,
-.theme-forest select {
-  background-color: #dcfce7 !important;
-  color: #14532d !important;
+/* === TEMA ARDESIA === */
+html.theme-slate {
+  background: #f8fafc !important;
 }
 
-.theme-purple input,
-.theme-purple textarea,
-.theme-purple select {
-  background-color: #fae8ff !important;
-  color: #581c87 !important;
+.theme-slate .bg-gray-50 {
+  background-color: #f8fafc !important;
+}
+
+.theme-slate .bg-white,
+.theme-slate .dark\:bg-gray-800 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+.theme-slate input,
+.theme-slate textarea,
+.theme-slate select {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.theme-slate input:focus,
+.theme-slate textarea:focus,
+.theme-slate select:focus {
+  border-color: #475569 !important;
 }
