@@ -55,18 +55,32 @@ export function useTheme() {
     const theme = THEMES[currentTheme] || THEMES.light;
     const root = document.documentElement;
 
-    // Applica le classi dark mode
+    // Rimuovi tutte le classi tema precedenti
+    Object.keys(THEMES).forEach(key => {
+      root.classList.remove(`theme-${key}`);
+    });
+    root.classList.remove('dark');
+
+    // Applica la classe del tema corrente
     if (currentTheme === 'dark') {
       root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
     }
+    root.classList.add(`theme-${currentTheme}`);
 
     // Applica le variabili CSS personalizzate
     root.style.setProperty('--color-primary', theme.primary);
     root.style.setProperty('--color-background', theme.background);
     root.style.setProperty('--color-text', theme.text);
     root.style.setProperty('--color-card', theme.card);
+
+    // Applica anche i colori al body per i temi colorati
+    if (currentTheme !== 'light' && currentTheme !== 'dark') {
+      document.body.style.backgroundColor = theme.background;
+      document.body.style.color = theme.text;
+    } else {
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
+    }
 
     // Applica font size
     const fontSizes = {

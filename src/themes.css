@@ -1,0 +1,62 @@
+/* Temi colorati - applicano i colori del tema ai componenti */
+
+/* Tema Oceano */
+.theme-ocean .bg-white:not(.dark\:bg-gray-800) {
+  background-color: #f0f9ff !important;
+}
+
+.theme-ocean .text-gray-900 {
+  color: #0c4a6e !important;
+}
+
+/* Tema Tramonto */
+.theme-sunset .bg-white:not(.dark\:bg-gray-800) {
+  background-color: #fffbeb !important;
+}
+
+.theme-sunset .text-gray-900 {
+  color: #78350f !important;
+}
+
+/* Tema Foresta */
+.theme-forest .bg-white:not(.dark\:bg-gray-800) {
+  background-color: #f0fdf4 !important;
+}
+
+.theme-forest .text-gray-900 {
+  color: #064e3b !important;
+}
+
+/* Tema Viola */
+.theme-purple .bg-white:not(.dark\:bg-gray-800) {
+  background-color: #faf5ff !important;
+}
+
+.theme-purple .text-gray-900 {
+  color: #581c87 !important;
+}
+
+/* Applica background per tutti i temi tranne light e dark */
+.theme-ocean,
+.theme-sunset,
+.theme-forest,
+.theme-purple {
+  min-height: 100vh;
+}
+
+/* Override per card nei temi colorati */
+.theme-ocean .bg-white {
+  background-color: #e0f2fe !important;
+}
+
+.theme-sunset .bg-white {
+  background-color: #fef3c7 !important;
+}
+
+.theme-forest .bg-white {
+  background-color: #d1fae5 !important;
+}
+
+.theme-purple .bg-white {
+  background-color: #f3e8ff !important;
+}

@@ -29,10 +29,15 @@ export function useNotifications() {
       return null;
     }
 
+    // Determina il base path corretto (per GitHub Pages o locale)
+    const basePath = import.meta.env.BASE_URL || '/';
+    const iconPath = `${basePath}pwa-192x192.png`.replace('//', '/');
+
     const notification = new Notification(title, {
-      icon: '/pwa-192x192.png',
-      badge: '/pwa-192x192.png',
+      icon: iconPath,
+      badge: iconPath,
       requireInteraction: true, // La notifica rimane visibile
+      vibrate: [200, 100, 200], // Pattern di vibrazione
       ...options,
     });
 
