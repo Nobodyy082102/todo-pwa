@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useTheme } from './hooks/useTheme';
 import { TodoForm } from './components/TodoForm';
@@ -10,6 +10,11 @@ import { NotificationManager } from './components/NotificationManager';
 import { BottomNav } from './components/BottomNav';
 import { OnlineStatus } from './components/OnlineStatus';
 import { Mascot } from './components/Mascot';
+import { FilterPanel } from './components/FilterPanel';
+import { SearchBar } from './components/SearchBar';
+import { StatsDashboard } from './components/StatsDashboard';
+import { filterTodos, searchTodos } from './utils/filterTodos';
+import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
 import { Download, Upload } from 'lucide-react';
 
 function App() {
@@ -20,6 +25,32 @@ function App() {
   const [taskAddedTrigger, setTaskAddedTrigger] = useState(0);
   const [taskCompletedTrigger, setTaskCompletedTrigger] = useState(0);
   const { animationsEnabled } = useTheme();
+
+  // Filter and search state
+  const [filters, setFilters] = useState({
+    priorities: [],
+    categories: [],
+    showCompleted: true,
+    dateRange: 'all',
+  });
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sharedTodoNotification, setSharedTodoNotification] = useState(null);
+
+  // Check for shared TODO in URL on mount
+  useEffect(() => {
+    const sharedTodo = getSharedTodoFromUrl();
+    if (sharedTodo) {
+      // Add the shared todo
+      setTodos(prevTodos => [...prevTodos, sharedTodo]);
+      setSharedTodoNotification(`Attività "${sharedTodo.title}" importata con successo!`);
+      clearShareParamFromUrl();
+
+      // Clear notification after 5 seconds
+      setTimeout(() => {
+        setSharedTodoNotification(null);
+      }, 5000);
+    }
+  }, []); // Only run on mount
 
   const addTodo = (todo) => {
     setTodos([...todos, todo]);
@@ -119,6 +150,13 @@ function App() {
 
   const pendingTodos = todos.filter((todo) => !todo.completed);
 
+  // Apply filters and search
+  const filteredTodos = useMemo(() => {
+    let result = filterTodos(todos, filters);
+    result = searchTodos(result, searchQuery);
+    return result;
+  }, [todos, filters, searchQuery]);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors relative overflow-visible">
       {/* Notification Manager - componente invisibile che gestisce le notifiche */}
@@ -154,6 +192,22 @@ function App() {
         {/* Form per aggiungere nuove attività */}
         <TodoForm onAdd={addTodo} />
 
+        {/* Search Bar */}
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Cerca per titolo, descrizione o categoria..."
+        />
+
+        {/* Filter Panel */}
+        <FilterPanel
+          activeFilters={filters}
+          onFilterChange={setFilters}
+        />
+
+        {/* Statistics Dashboard */}
+        {todos.length > 0 && <StatsDashboard todos={todos} />}
+
         {/* Pulsanti Esporta/Importa */}
         <div className="flex gap-3 justify-center flex-wrap">
           <button
@@ -177,7 +231,7 @@ function App() {
 
         {/* Lista delle attività */}
         <TodoList
-          todos={todos}
+          todos={filteredTodos}
           onToggle={toggleTodo}
           onDelete={deleteTodo}
           onSnooze={snoozeTodo}
@@ -234,6 +288,16 @@ function App() {
 
       {/* Online Status Indicator */}
       <OnlineStatus />
+
+      {/* Shared TODO Notification */}
+      {sharedTodoNotification && (
+        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-bounce">
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="font-medium">{sharedTodoNotification}</span>
+        </div>
+      )}
 
       {/* Bottom Navigation (solo mobile) */}
       <BottomNav

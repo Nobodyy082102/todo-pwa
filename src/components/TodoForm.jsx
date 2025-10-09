@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Clock, Repeat } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { CategorySelector } from './CategorySelector';
 
 export function TodoForm({ onAdd }) {
   const [title, setTitle] = useState('');
@@ -10,6 +11,7 @@ export function TodoForm({ onAdd }) {
   const [reminderDate, setReminderDate] = useState('');
   const [reminderTime, setReminderTime] = useState('');
   const [recurringHours, setRecurringHours] = useState(24);
+  const [categories, setCategories] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,6 +41,7 @@ export function TodoForm({ onAdd }) {
       completed: false,
       createdAt: Date.now(),
       reminder,
+      categories,
     };
 
     onAdd(todo);
@@ -51,6 +54,7 @@ export function TodoForm({ onAdd }) {
     setReminderDate('');
     setReminderTime('');
     setRecurringHours(24);
+    setCategories([]);
   };
 
   const priorityColors = {
@@ -111,6 +115,11 @@ export function TodoForm({ onAdd }) {
           </button>
         ))}
       </div>
+
+      <CategorySelector
+        selectedCategories={categories}
+        onChange={setCategories}
+      />
 
       <div className="space-y-3">
         <div className="flex items-center gap-2">

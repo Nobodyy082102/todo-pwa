@@ -1,6 +1,8 @@
 import React from 'react';
 import { Check, Trash2, Clock, Repeat, Bell } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { DEFAULT_CATEGORIES } from './CategorySelector';
+import { ShareButton } from './ShareButton';
 
 export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
   const priorityColors = {
@@ -24,6 +26,11 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
       hour: '2-digit',
       minute: '2-digit',
     });
+  };
+
+  const getCategoryColor = (categoryName) => {
+    const predefined = DEFAULT_CATEGORIES.find(c => c.name === categoryName);
+    return predefined?.color || 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600';
   };
 
   return (
@@ -73,6 +80,19 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
 
           {todo.description && (
             <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{todo.description}</p>
+          )}
+
+          {todo.categories && todo.categories.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {todo.categories.map((category) => (
+                <span
+                  key={category}
+                  className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium border ${getCategoryColor(category)}`}
+                >
+                  {category}
+                </span>
+              ))}
+            </div>
           )}
 
           {todo.reminder && (
@@ -125,12 +145,15 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
           )}
         </div>
 
-        <button
-          onClick={() => onDelete(todo.id)}
-          className="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors flex-shrink-0 mt-1"
-        >
-          <Trash2 size={20} />
-        </button>
+        <div className="flex items-start gap-2 flex-shrink-0 mt-1">
+          <ShareButton todo={todo} />
+          <button
+            onClick={() => onDelete(todo.id)}
+            className="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
+          >
+            <Trash2 size={20} />
+          </button>
+        </div>
       </div>
     </motion.div>
   );
