@@ -2,12 +2,19 @@ import { useEffect } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 
 export const THEMES = {
+  auto: {
+    name: 'Automatico',
+    primary: 'auto', // Segue il sistema
+    background: 'auto',
+    text: 'auto',
+    card: 'auto',
+  },
   light: {
     name: 'Chiaro',
     primary: '#2563eb',
-    background: '#ffffff',
+    background: '#f9fafb',
     text: '#111827',
-    card: '#f9fafb',
+    card: '#ffffff',
   },
   dark: {
     name: 'Scuro',
@@ -16,30 +23,26 @@ export const THEMES = {
     text: '#f9fafb',
     card: '#1f2937',
   },
-  ocean: {
-    name: 'Oceano',
-    primary: '#0284c7',
-    background: '#f0f9ff',
-    text: '#0c4a6e',
-    card: '#e0f2fe',
-  },
-  slate: {
-    name: 'Ardesia',
-    primary: '#475569',
-    background: '#f8fafc',
-    text: '#0f172a',
-    card: '#f1f5f9',
-  },
 };
 
 export function useTheme() {
-  const [currentTheme, setCurrentTheme] = useLocalStorage('theme', 'light');
+  const [currentTheme, setCurrentTheme] = useLocalStorage('theme', 'auto');
   const [fontSize, setFontSize] = useLocalStorage('fontSize', 'medium');
   const [animationsEnabled, setAnimationsEnabled] = useLocalStorage('animations', true);
 
   useEffect(() => {
-    const theme = THEMES[currentTheme] || THEMES.light;
     const html = document.documentElement;
+
+    // Determina il tema effettivo da applicare
+    let effectiveTheme = currentTheme;
+
+    if (currentTheme === 'auto') {
+      // Segui le preferenze del sistema
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      effectiveTheme = prefersDark ? 'dark' : 'light';
+    }
+
+    const theme = THEMES[effectiveTheme] || THEMES.light;
 
     // Rimuovi tutte le classi tema precedenti
     Object.keys(THEMES).forEach(key => {
@@ -47,11 +50,11 @@ export function useTheme() {
     });
     html.classList.remove('dark');
 
-    // Applica la classe del tema corrente al tag HTML
-    if (currentTheme === 'dark') {
+    // Applica la classe del tema effettivo
+    if (effectiveTheme === 'dark') {
       html.classList.add('dark');
     }
-    html.classList.add(`theme-${currentTheme}`);
+    html.classList.add(`theme-${effectiveTheme}`);
 
     // Applica le variabili CSS personalizzate
     html.style.setProperty('--color-primary', theme.primary);
@@ -72,6 +75,28 @@ export function useTheme() {
       html.style.setProperty('--animation-duration', '0s');
     } else {
       html.style.setProperty('--animation-duration', '0.3s');
+    }
+
+    // Listener per cambiamenti nelle preferenze del sistema (solo se tema auto)
+    if (currentTheme === 'auto') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = (e) => {
+        const newEffectiveTheme = e.matches ? 'dark' : 'light';
+        const newTheme = THEMES[newEffectiveTheme];
+
+        html.classList.remove('dark', 'light');
+        if (newEffectiveTheme === 'dark') {
+          html.classList.add('dark');
+        }
+
+        html.style.setProperty('--color-primary', newTheme.primary);
+        html.style.setProperty('--color-background', newTheme.background);
+        html.style.setProperty('--color-text', newTheme.text);
+        html.style.setProperty('--color-card', newTheme.card);
+      };
+
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
     }
   }, [currentTheme, fontSize, animationsEnabled]);
 

@@ -9,6 +9,7 @@ import { Settings } from './components/Settings';
 import { NotificationManager } from './components/NotificationManager';
 import { BottomNav } from './components/BottomNav';
 import { OnlineStatus } from './components/OnlineStatus';
+import { Mascot } from './components/Mascot';
 import { Download, Upload } from 'lucide-react';
 
 function App() {
@@ -16,13 +17,22 @@ function App() {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [activeView, setActiveView] = useState('active');
   const [showSettings, setShowSettings] = useState(false);
+  const [taskAddedTrigger, setTaskAddedTrigger] = useState(0);
+  const [taskCompletedTrigger, setTaskCompletedTrigger] = useState(0);
   const { animationsEnabled } = useTheme();
 
   const addTodo = (todo) => {
     setTodos([...todos, todo]);
+    setTaskAddedTrigger(prev => prev + 1); // Trigger elefantino
   };
 
   const toggleTodo = (id) => {
+    const todo = todos.find(t => t.id === id);
+    if (todo && !todo.completed) {
+      // Trigger solo quando completi (non quando de-completi)
+      setTaskCompletedTrigger(prev => prev + 1);
+    }
+
     setTodos(
       todos.map((todo) =>
         todo.id === id ? { ...todo, completed: !todo.completed } : todo
@@ -242,6 +252,12 @@ function App() {
           setActiveView('settings');
           setShowSettings(!showSettings);
         }}
+      />
+
+      {/* Mascotte Elefantino */}
+      <Mascot
+        onTaskAdded={taskAddedTrigger}
+        onTaskCompleted={taskCompletedTrigger}
       />
 
       {/* Footer */}
