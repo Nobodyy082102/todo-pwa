@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Trash2, Clock, Repeat, Bell } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
   const priorityColors = {
@@ -26,7 +27,14 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
   };
 
   return (
-    <div
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9, x: -100 }}
+      whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
       className={`border-l-4 rounded-lg p-4 shadow-md transition-all hover:shadow-lg ${
         priorityColors[todo.priority]
       } ${todo.completed ? 'opacity-60' : ''} bg-white dark:bg-gray-800`}
@@ -124,6 +132,6 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
           <Trash2 size={20} />
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }

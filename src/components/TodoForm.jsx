@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Clock, Repeat } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export function TodoForm({ onAdd }) {
   const [title, setTitle] = useState('');
@@ -59,7 +60,13 @@ export function TodoForm({ onAdd }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-4">
+    <motion.form
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      onSubmit={handleSubmit}
+      className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-4"
+    >
       <div>
         <input
           type="text"
@@ -153,6 +160,6 @@ export function TodoForm({ onAdd }) {
         <Plus size={20} />
         Aggiungi Attività
       </button>
-    </form>
+    </motion.form>
   );
 }

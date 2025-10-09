@@ -7,6 +7,7 @@ import { FloatingActionButton } from './components/FloatingActionButton';
 import { SidePanel } from './components/SidePanel';
 import { Settings } from './components/Settings';
 import { NotificationManager } from './components/NotificationManager';
+import { Download, Upload } from 'lucide-react';
 
 function App() {
   const [todos, setTodos] = useLocalStorage('todos', []);
@@ -59,6 +60,49 @@ function App() {
     );
   };
 
+  const reorderTodos = (newOrder, isCompleted) => {
+    const pendingTodos = todos.filter((todo) => !todo.completed);
+    const completedTodos = todos.filter((todo) => todo.completed);
+
+    if (isCompleted) {
+      setTodos([...pendingTodos, ...newOrder]);
+    } else {
+      setTodos([...newOrder, ...completedTodos]);
+    }
+  };
+
+  const exportData = () => {
+    const dataStr = JSON.stringify(todos, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `todo-backup-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const importData = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedTodos = JSON.parse(e.target.result);
+        if (Array.isArray(importedTodos)) {
+          setTodos(importedTodos);
+          alert('Dati importati con successo!');
+        } else {
+          alert('Formato file non valido');
+        }
+      } catch (error) {
+        alert('Errore durante l\'importazione: ' + error.message);
+      }
+    };
+    reader.readAsText(file);
+  };
+
   const pendingTodos = todos.filter((todo) => !todo.completed);
 
   return (
@@ -92,12 +136,34 @@ function App() {
         {/* Form per aggiungere nuove attività */}
         <TodoForm onAdd={addTodo} />
 
+        {/* Pulsanti Esporta/Importa */}
+        <div className="flex gap-3 justify-center">
+          <button
+            onClick={exportData}
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-md transition-all hover:shadow-lg active:scale-95"
+          >
+            <Download size={18} />
+            <span>Esporta Dati</span>
+          </button>
+          <label className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-md transition-all hover:shadow-lg active:scale-95 cursor-pointer">
+            <Upload size={18} />
+            <span>Importa Dati</span>
+            <input
+              type="file"
+              accept=".json"
+              onChange={importData}
+              className="hidden"
+            />
+          </label>
+        </div>
+
         {/* Lista delle attività */}
         <TodoList
           todos={todos}
           onToggle={toggleTodo}
           onDelete={deleteTodo}
           onSnooze={snoozeTodo}
+          onReorder={reorderTodos}
         />
 
         {/* Impostazioni */}
@@ -143,6 +209,7 @@ function App() {
             onToggle={toggleTodo}
             onDelete={deleteTodo}
             onSnooze={snoozeTodo}
+            onReorder={reorderTodos}
           />
         </div>
       </SidePanel>
