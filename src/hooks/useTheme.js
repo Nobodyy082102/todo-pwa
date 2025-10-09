@@ -125,6 +125,17 @@ export function useTheme() {
     html.style.setProperty('--color-text', theme.text);
     html.style.setProperty('--color-card', theme.card);
 
+    // Applica i colori direttamente per i temi custom
+    if (currentTheme !== 'auto' && currentTheme !== 'light' && currentTheme !== 'dark') {
+      // Tema custom - applica colori specifici
+      document.body.style.backgroundColor = theme.background;
+      document.body.style.color = theme.text;
+    } else {
+      // Temi standard - rimuovi stili inline
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
+    }
+
     // Applica font size
     const fontSizes = {
       small: '14px',

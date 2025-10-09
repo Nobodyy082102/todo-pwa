@@ -47,6 +47,69 @@
   }
 
   /* ============================================ */
+  /* CUSTOM THEME COLORS */
+  /* ============================================ */
+
+  /* Applica colori tema custom a elementi principali */
+  [class*="theme-"]:not(.theme-auto):not(.theme-light):not(.theme-dark) {
+    /* Header e Footer con colori tema */
+    header,
+    footer {
+      background-color: var(--color-card) !important;
+      color: var(--color-text) !important;
+    }
+
+    /* Card e pannelli con glassmorphism */
+    .glass-light,
+    .glass-dark {
+      background-color: rgba(255, 255, 255, 0.1) !important;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+    }
+
+    /* Background gradients con colori tema */
+    .gradient-animated-slow {
+      background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        var(--color-secondary) 50%,
+        var(--color-primary) 100%
+      ) !important;
+    }
+
+    /* Testo base */
+    h1, h2, h3, h4, h5, h6,
+    .text-gray-900 {
+      color: var(--color-text) !important;
+    }
+
+    /* Testo secondario */
+    .text-gray-600,
+    .text-gray-500,
+    .text-gray-400 {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+
+    /* Pulsanti primari */
+    .bg-indigo-600,
+    .bg-indigo-700 {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)) !important;
+    }
+
+    /* Badge e indicatori */
+    .bg-indigo-100,
+    .bg-indigo-50 {
+      background-color: rgba(255, 255, 255, 0.15) !important;
+      color: var(--color-text) !important;
+    }
+
+    .text-indigo-600,
+    .text-indigo-400 {
+      color: var(--color-primary) !important;
+    }
+  }
+
+  /* ============================================ */
   /* GLASSMORPHISM UTILITIES */
   /* ============================================ */
   .glass {
