@@ -120,7 +120,7 @@ function App() {
   const pendingTodos = todos.filter((todo) => !todo.completed);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors relative overflow-visible">
       {/* Notification Manager - componente invisibile che gestisce le notifiche */}
       <NotificationManager
         todos={todos}

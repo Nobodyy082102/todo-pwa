@@ -57,40 +57,41 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
   };
 
   const getTrunkAnimation = () => {
+    // Coda del gatto invece della proboscide
     switch (animationType) {
       case 'jump':
         return {
           d: [
-            "M 32 46 Q 28 54 32 58",
-            "M 32 46 Q 36 52 32 58",
-            "M 32 46 Q 24 52 28 58",
-            "M 32 46 Q 28 54 32 58",
+            "M 8 40 Q 4 35 6 30",
+            "M 8 40 Q 2 38 4 32",
+            "M 8 40 Q 3 36 5 28",
+            "M 8 40 Q 4 35 6 30",
           ]
         };
       case 'celebrate':
         return {
           d: [
-            "M 32 46 Q 28 54 32 58",
-            "M 32 46 Q 20 50 18 54",
-            "M 32 46 Q 44 50 46 54",
-            "M 32 46 Q 20 52 16 58",
-            "M 32 46 Q 44 52 48 58",
-            "M 32 46 Q 28 54 32 58",
+            "M 8 40 Q 4 35 6 30",
+            "M 8 40 Q 0 40 2 34",
+            "M 8 40 Q 2 32 4 26",
+            "M 8 40 Q 0 38 3 30",
+            "M 8 40 Q 4 34 7 28",
+            "M 8 40 Q 4 35 6 30",
           ]
         };
       default:
         return {
           d: [
-            "M 32 46 Q 28 54 32 58",
-            "M 32 46 Q 30 55 32 58",
-            "M 32 46 Q 28 54 32 58",
+            "M 8 40 Q 4 35 6 30",
+            "M 8 40 Q 3 37 5 32",
+            "M 8 40 Q 4 35 6 30",
           ]
         };
     }
   };
 
   return (
-    <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-30 pointer-events-none">
+    <div className="fixed bottom-20 right-4 md:bottom-6 md:right-6 z-[100] pointer-events-none">
       <motion.div
         initial={{ scale: 0, opacity: 0 }}
         animate={{
@@ -112,13 +113,13 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
           },
         }}
       >
-        {/* Elefantino SVG sempre animato */}
+        {/* Gattino SVG sempre animato */}
         <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Ombra */}
           <motion.ellipse
             cx="32"
-            cy="52"
-            rx="12"
+            cy="54"
+            rx="14"
             ry="3"
             fill="currentColor"
             className="text-gray-400 dark:text-gray-700"
@@ -127,16 +128,54 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          {/* Corpo */}
-          <motion.circle
+          {/* Corpo del gatto */}
+          <motion.ellipse
             cx="32"
-            cy="30"
-            r="18"
+            cy="38"
+            rx="14"
+            ry="16"
             fill="currentColor"
-            className="text-blue-500 dark:text-blue-600"
+            className="text-orange-500 dark:text-orange-600"
             animate={animationType === 'celebrate' ? { scale: [1, 1.1, 1, 1.05, 1] } : {}}
             transition={{ duration: 0.5, repeat: animationType === 'celebrate' ? 4 : 0 }}
           />
+
+          {/* Testa */}
+          <motion.circle
+            cx="32"
+            cy="24"
+            r="12"
+            fill="currentColor"
+            className="text-orange-500 dark:text-orange-600"
+            animate={animationType === 'celebrate' ? { scale: [1, 1.1, 1, 1.05, 1] } : {}}
+            transition={{ duration: 0.5, repeat: animationType === 'celebrate' ? 4 : 0 }}
+          />
+
+          {/* Orecchie */}
+          <motion.path
+            d="M 22 18 L 18 8 L 26 16 Z"
+            fill="currentColor"
+            className="text-orange-500 dark:text-orange-600"
+            animate={animationType !== 'idle' ? {
+              rotate: [-5, 5, -5],
+              transformOrigin: "22px 18px"
+            } : {}}
+            transition={{ duration: 0.3, repeat: animationType === 'celebrate' ? 3 : 0 }}
+          />
+          <motion.path
+            d="M 42 18 L 46 8 L 38 16 Z"
+            fill="currentColor"
+            className="text-orange-500 dark:text-orange-600"
+            animate={animationType !== 'idle' ? {
+              rotate: [5, -5, 5],
+              transformOrigin: "42px 18px"
+            } : {}}
+            transition={{ duration: 0.3, repeat: animationType === 'celebrate' ? 3 : 0 }}
+          />
+
+          {/* Interno orecchie rosa */}
+          <path d="M 22 18 L 20 12 L 24 16 Z" fill="#ff6b9d" opacity="0.6"/>
+          <path d="M 42 18 L 44 12 L 40 16 Z" fill="#ff6b9d" opacity="0.6"/>
 
           {/* Occhi animati */}
           <motion.g
@@ -146,23 +185,75 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             } : {}}
             transition={{ duration: 0.5, repeat: animationType === 'celebrate' ? 4 : 0 }}
           >
-            <motion.circle
-              cx="24"
-              cy="26"
-              r="2.5"
-              fill="white"
+            {/* Occhi grandi da gatto */}
+            <motion.ellipse
+              cx="26"
+              cy="22"
+              rx="3"
+              ry="4"
+              fill="#2d3748"
               animate={{ scaleY: [1, 0.1, 1] }}
               transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
             />
-            <motion.circle
-              cx="40"
-              cy="26"
-              r="2.5"
-              fill="white"
+            <motion.ellipse
+              cx="38"
+              cy="22"
+              rx="3"
+              ry="4"
+              fill="#2d3748"
+              animate={{ scaleY: [1, 0.1, 1] }}
+              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+            />
+            {/* Pupille */}
+            <motion.ellipse
+              cx="26"
+              cy="22"
+              rx="1.5"
+              ry="2.5"
+              fill="#10b981"
+              animate={{ scaleY: [1, 0.1, 1] }}
+              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+            />
+            <motion.ellipse
+              cx="38"
+              cy="22"
+              rx="1.5"
+              ry="2.5"
+              fill="#10b981"
               animate={{ scaleY: [1, 0.1, 1] }}
               transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
             />
           </motion.g>
+
+          {/* Naso rosa */}
+          <motion.path
+            d="M 32 26 L 30 28 L 34 28 Z"
+            fill="#ff6b9d"
+            animate={animationType === 'celebrate' ? { scale: [1, 1.2, 1] } : {}}
+            transition={{ duration: 0.3, repeat: animationType === 'celebrate' ? 5 : 0 }}
+          />
+
+          {/* Baffi */}
+          <g className="opacity-80">
+            {/* Sinistra */}
+            <motion.line x1="18" y1="26" x2="10" y2="24" stroke="currentColor" strokeWidth="1" className="text-gray-700 dark:text-gray-300"
+              animate={{ rotate: [0, -2, 0], transformOrigin: "18px 26px" }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            <motion.line x1="18" y1="28" x2="10" y2="30" stroke="currentColor" strokeWidth="1" className="text-gray-700 dark:text-gray-300"
+              animate={{ rotate: [0, 2, 0], transformOrigin: "18px 28px" }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            {/* Destra */}
+            <motion.line x1="46" y1="26" x2="54" y2="24" stroke="currentColor" strokeWidth="1" className="text-gray-700 dark:text-gray-300"
+              animate={{ rotate: [0, 2, 0], transformOrigin: "46px 26px" }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+            <motion.line x1="46" y1="28" x2="54" y2="30" stroke="currentColor" strokeWidth="1" className="text-gray-700 dark:text-gray-300"
+              animate={{ rotate: [0, -2, 0], transformOrigin: "46px 28px" }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </g>
 
           {/* Guance rosa (compaiono quando celebra/salta) */}
           <AnimatePresence>
@@ -192,26 +283,40 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
             )}
           </AnimatePresence>
 
-          {/* Bocca (cambia espressione) */}
-          <motion.path
-            d={animationType === 'idle' ? "M 26 36 Q 32 38 38 36" : "M 24 36 Q 32 42 40 36"}
-            stroke="white"
-            strokeWidth="2.5"
-            fill="none"
-            strokeLinecap="round"
-            animate={{
-              d: animationType === 'idle'
-                ? ["M 26 36 Q 32 38 38 36", "M 26 36 Q 32 37 38 36", "M 26 36 Q 32 38 38 36"]
-                : undefined
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
+          {/* Bocca del gatto */}
+          <motion.g>
+            <motion.path
+              d="M 32 28 Q 32 30 30 30"
+              stroke="#2d3748"
+              strokeWidth="1.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            <motion.path
+              d="M 32 28 Q 32 30 34 30"
+              stroke="#2d3748"
+              strokeWidth="1.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            {animationType !== 'idle' && (
+              <motion.path
+                d="M 28 30 Q 32 33 36 30"
+                stroke="#2d3748"
+                strokeWidth="1.5"
+                fill="none"
+                strokeLinecap="round"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+              />
+            )}
+          </motion.g>
 
-          {/* Proboscide super animata */}
+          {/* Coda animata (invece della proboscide) */}
           <motion.path
             stroke="currentColor"
-            className="text-blue-600 dark:text-blue-400"
-            strokeWidth="3.5"
+            className="text-orange-600 dark:text-orange-500"
+            strokeWidth="4"
             fill="none"
             strokeLinecap="round"
             animate={getTrunkAnimation()}
@@ -221,6 +326,12 @@ export function Mascot({ onTaskAdded, onTaskCompleted }) {
               ease: "easeInOut"
             }}
           />
+
+          {/* Zampe */}
+          <motion.g>
+            <ellipse cx="26" cy="50" rx="3" ry="4" fill="currentColor" className="text-orange-600 dark:text-orange-500"/>
+            <ellipse cx="38" cy="50" rx="3" ry="4" fill="currentColor" className="text-orange-600 dark:text-orange-500"/>
+          </motion.g>
 
           {/* Particelle celebrative */}
           <AnimatePresence>
