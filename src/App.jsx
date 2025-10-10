@@ -31,6 +31,7 @@ import { CityBuilder } from './components/CityBuilder';
 import { AISmartScheduler } from './components/AISmartScheduler';
 import { TaskDependencies } from './components/TaskDependencies';
 import { AutomationRules } from './components/AutomationRules';
+import { RoutineLibrary } from './components/RoutineLibrary';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
 import { checkNewAchievements } from './utils/achievements';
@@ -341,6 +342,9 @@ function App() {
           onUpdateTodo={updateTodo}
           onCreateTodo={addTodo}
         />
+
+        {/* Routine Library */}
+        <RoutineLibrary onApplyRoutine={addMultipleTodos} />
 
         {/* Export Panel */}
         <ExportPanel todos={todos} />
