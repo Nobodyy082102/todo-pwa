@@ -64,9 +64,9 @@ export function TodoForm({ onAdd }) {
   };
 
   const priorityLabels = {
-    high: 'Alta',
-    medium: 'Media',
-    low: 'Bassa',
+    high: 'Priorità',
+    medium: 'Poca priorità',
+    low: 'Task semplice',
   };
 
   return (
