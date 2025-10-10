@@ -16,22 +16,17 @@ import { SearchBar } from './components/SearchBar';
 import { StatsDashboard } from './components/StatsDashboard';
 import { AdvancedStats } from './components/AdvancedStats';
 import { GameStats } from './components/GameStats';
-import { AchievementPanel } from './components/AchievementPanel';
-import { AchievementToast } from './components/AchievementToast';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { ExportPanel } from './components/ExportPanel';
 import { FocusMode } from './components/FocusMode';
 import { VirtualPet } from './components/VirtualPet';
 import { StreakFlame } from './components/StreakFlame';
-import { ActivityHeatmap } from './components/ActivityHeatmap';
 import { SeasonalEffects } from './components/SeasonalEffects';
 import { ThemeCreator } from './components/ThemeCreator';
 import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { DailyQuests } from './components/DailyQuests';
-import { WorldMap } from './components/WorldMap';
 import { CoOpMode } from './components/CoOpMode';
-import { SkillTree } from './components/SkillTree';
 import { HabitTrackerPlus } from './components/HabitTrackerPlus';
 import { TimeTravel } from './components/TimeTravel';
 import { CityBuilder } from './components/CityBuilder';
@@ -310,12 +305,6 @@ function App() {
           <StreakFlame todos={todos} />
         </div>
 
-        {/* Heatmap */}
-        <ActivityHeatmap todos={todos} />
-
-        {/* Achievement Panel */}
-        <AchievementPanel unlockedAchievements={unlockedAchievements} />
-
         {/* Theme Switcher */}
         <ThemeSwitcher />
 
@@ -327,12 +316,6 @@ function App() {
 
         {/* Daily Quests */}
         <DailyQuests todos={todos} />
-
-        {/* World Map */}
-        <WorldMap todos={todos} />
-
-        {/* Skill Tree */}
-        <SkillTree todos={todos} />
 
         {/* City Builder */}
         <CityBuilder todos={todos} />
@@ -434,14 +417,6 @@ function App() {
           </svg>
           <span className="font-medium">{sharedTodoNotification}</span>
         </div>
-      )}
-
-      {/* Achievement Toast */}
-      {currentAchievement && (
-        <AchievementToast
-          achievement={currentAchievement}
-          onClose={() => setCurrentAchievement(null)}
-        />
       )}
 
       {/* Bottom Navigation (solo mobile) */}
