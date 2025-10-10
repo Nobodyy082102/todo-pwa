@@ -22,7 +22,6 @@ import { FocusMode } from './components/FocusMode';
 import { VirtualPet } from './components/VirtualPet';
 import { StreakFlame } from './components/StreakFlame';
 import { SeasonalEffects } from './components/SeasonalEffects';
-import { ThemeCreator } from './components/ThemeCreator';
 import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { DailyQuests } from './components/DailyQuests';
@@ -305,9 +304,6 @@ function App() {
 
         {/* Theme Switcher */}
         <ThemeSwitcher />
-
-        {/* Theme Creator */}
-        <ThemeCreator />
 
         {/* Energy Tracker */}
         <EnergyTracker />
