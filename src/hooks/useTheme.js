@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 
 export const THEMES = {
@@ -88,6 +88,16 @@ export function useTheme() {
   const [currentTheme, setCurrentTheme] = useLocalStorage('theme', 'auto');
   const [fontSize, setFontSize] = useLocalStorage('fontSize', 'medium');
   const [animationsEnabled, setAnimationsEnabled] = useLocalStorage('animations', true);
+  const [customThemes, setCustomThemes] = useLocalStorage('customThemes', []);
+
+  // Combina temi standard con temi custom
+  const allThemes = useMemo(() => {
+    const combined = { ...THEMES };
+    customThemes.forEach(theme => {
+      combined[theme.id] = theme;
+    });
+    return combined;
+  }, [customThemes]);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -101,13 +111,13 @@ export function useTheme() {
       effectiveTheme = prefersDark ? 'dark' : 'light';
     }
 
-    const theme = THEMES[effectiveTheme] || THEMES.light;
+    const theme = allThemes[effectiveTheme] || allThemes.light;
 
     // Aggiungi classe per transizione smooth
     html.style.transition = 'background-color 0.5s ease, color 0.5s ease';
 
     // Rimuovi tutte le classi tema precedenti
-    Object.keys(THEMES).forEach(key => {
+    Object.keys(allThemes).forEach(key => {
       html.classList.remove(`theme-${key}`);
     });
     html.classList.remove('dark');
@@ -172,7 +182,7 @@ export function useTheme() {
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
-  }, [currentTheme, fontSize, animationsEnabled]);
+  }, [currentTheme, fontSize, animationsEnabled, allThemes]);
 
   return {
     currentTheme,
@@ -181,6 +191,8 @@ export function useTheme() {
     setFontSize,
     animationsEnabled,
     setAnimationsEnabled,
-    themes: THEMES,
+    themes: allThemes,
+    customThemes,
+    setCustomThemes,
   };
 }

@@ -29,7 +29,7 @@ export function ThemeCreator({ onThemeCreated }) {
     };
 
     setCustomThemes([...customThemes, newTheme]);
-    alert(`Tema "${themeName}" salvato! 🎨`);
+    alert(`Tema "${themeName}" salvato! 🎨\n\nPuoi selezionarlo dalla sezione "Temi" qui sotto.`);
 
     // Reset
     setThemeName('');
@@ -143,30 +143,13 @@ export function ThemeCreator({ onThemeCreated }) {
           <span>Salva Tema</span>
         </button>
 
-        {/* Saved Themes */}
+        {/* Info message */}
         {customThemes.length > 0 && (
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-            <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              Temi Salvati ({customThemes.length})
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {customThemes.map((theme) => (
-                <div
-                  key={theme.id}
-                  className="p-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 text-center"
-                  style={{
-                    background: `linear-gradient(135deg, ${theme.background}, ${theme.card})`,
-                  }}
-                >
-                  <div
-                    className="text-xs font-medium truncate"
-                    style={{ color: theme.text }}
-                  >
-                    {theme.name}
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="p-3 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 rounded-lg">
+            <p className="text-sm text-indigo-700 dark:text-indigo-300 text-center">
+              ✨ {customThemes.length} tema{customThemes.length > 1 ? 'i' : ''} personalizzato{customThemes.length > 1 ? 'i' : ''} salvato{customThemes.length > 1 ? 'i' : ''}!<br />
+              <span className="text-xs">Selezionalo dalla sezione "Temi" qui sotto 👇</span>
+            </p>
           </div>
         )}
       </div>

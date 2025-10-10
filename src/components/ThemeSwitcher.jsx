@@ -1,12 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Palette, Check } from 'lucide-react';
+import { Palette, Check, Trash2 } from 'lucide-react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 
 export function ThemeSwitcher() {
-  const { currentTheme, setCurrentTheme } = useTheme();
+  const { currentTheme, setCurrentTheme, themes, customThemes, setCustomThemes } = useTheme();
 
-  const themeEntries = Object.entries(THEMES);
+  const themeEntries = Object.entries(themes);
+
+  const handleDeleteCustomTheme = (themeId, e) => {
+    e.stopPropagation(); // Evita di selezionare il tema quando si clicca delete
+    if (confirm('Eliminare questo tema personalizzato?')) {
+      setCustomThemes(customThemes.filter(t => t.id !== themeId));
+      // Se il tema eliminato era selezionato, torna al tema auto
+      if (currentTheme === themeId) {
+        setCurrentTheme('auto');
+      }
+    }
+  };
 
   return (
     <div className="glass-light dark:glass-dark rounded-2xl shadow-lg p-6 hover-lift border border-white/20 dark:border-white/10">
@@ -21,6 +32,7 @@ export function ThemeSwitcher() {
         {themeEntries.map(([key, theme]) => {
           const isSelected = currentTheme === key;
           const isAuto = key === 'auto';
+          const isCustom = theme.custom === true;
 
           return (
             <motion.button
@@ -28,12 +40,22 @@ export function ThemeSwitcher() {
               onClick={() => setCurrentTheme(key)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className={`relative rounded-xl p-4 border-2 transition-all overflow-hidden ${
+              className={`group relative rounded-xl p-4 border-2 transition-all overflow-hidden ${
                 isSelected
                   ? 'border-indigo-600 dark:border-indigo-400 shadow-lg'
                   : 'border-gray-300 dark:border-gray-600 hover:border-indigo-400'
               }`}
             >
+              {/* Delete button for custom themes */}
+              {isCustom && (
+                <button
+                  onClick={(e) => handleDeleteCustomTheme(key, e)}
+                  className="absolute top-1 right-1 z-10 p-1 bg-red-500 hover:bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Elimina tema"
+                >
+                  <Trash2 size={12} />
+                </button>
+              )}
               {/* Theme Preview */}
               <div className="relative h-24 rounded-lg overflow-hidden mb-3 shadow-inner">
                 {isAuto ? (
@@ -88,7 +110,7 @@ export function ThemeSwitcher() {
       <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
         {currentTheme === 'auto'
           ? 'Il tema si adatta automaticamente alle preferenze del sistema'
-          : `Tema ${THEMES[currentTheme]?.name} selezionato`}
+          : `Tema ${themes[currentTheme]?.name} selezionato`}
       </p>
     </div>
   );
