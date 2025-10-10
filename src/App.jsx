@@ -28,6 +28,9 @@ import { DailyQuests } from './components/DailyQuests';
 import { HabitTrackerPlus } from './components/HabitTrackerPlus';
 import { TimeTravel } from './components/TimeTravel';
 import { CityBuilder } from './components/CityBuilder';
+import { AISmartScheduler } from './components/AISmartScheduler';
+import { TaskDependencies } from './components/TaskDependencies';
+import { AutomationRules } from './components/AutomationRules';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
 import { checkNewAchievements } from './utils/achievements';
@@ -133,6 +136,12 @@ function App() {
   const deleteTodo = (id) => {
     playDelete();
     setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const updateTodo = (updatedTodo) => {
+    setTodos(todos.map((todo) =>
+      todo.id === updatedTodo.id ? updatedTodo : todo
+    ));
   };
 
   const snoozeTodo = (id, minutes) => {
@@ -319,6 +328,19 @@ function App() {
 
         {/* Time Travel */}
         <TimeTravel todos={todos} />
+
+        {/* AI Smart Scheduler */}
+        <AISmartScheduler todos={todos} onUpdateTodo={updateTodo} />
+
+        {/* Task Dependencies with Gantt Chart */}
+        <TaskDependencies todos={todos} onUpdateTodo={updateTodo} />
+
+        {/* Automation Rules (IFTTT) */}
+        <AutomationRules
+          todos={todos}
+          onUpdateTodo={updateTodo}
+          onCreateTodo={addTodo}
+        />
 
         {/* Export Panel */}
         <ExportPanel todos={todos} />
