@@ -26,11 +26,9 @@ import { ThemeCreator } from './components/ThemeCreator';
 import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { DailyQuests } from './components/DailyQuests';
-import { CoOpMode } from './components/CoOpMode';
 import { HabitTrackerPlus } from './components/HabitTrackerPlus';
 import { TimeTravel } from './components/TimeTravel';
 import { CityBuilder } from './components/CityBuilder';
-import { ProductivityBeats } from './components/ProductivityBeats';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
 import { checkNewAchievements } from './utils/achievements';
@@ -320,17 +318,11 @@ function App() {
         {/* City Builder */}
         <CityBuilder todos={todos} />
 
-        {/* Productivity Beats */}
-        <ProductivityBeats todos={todos} />
-
         {/* Habit Tracker Plus */}
         <HabitTrackerPlus todos={todos} />
 
-        {/* Time Travel & Co-Op Mode */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <TimeTravel todos={todos} />
-          <CoOpMode todos={todos} />
-        </div>
+        {/* Time Travel */}
+        <TimeTravel todos={todos} />
 
         {/* Export Panel */}
         <ExportPanel todos={todos} />
