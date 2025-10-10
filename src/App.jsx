@@ -17,17 +17,12 @@ import { StatsDashboard } from './components/StatsDashboard';
 import { AdvancedStats } from './components/AdvancedStats';
 import { GameStats } from './components/GameStats';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
-import { ExportPanel } from './components/ExportPanel';
 import { FocusMode } from './components/FocusMode';
 import { VirtualPet } from './components/VirtualPet';
 import { StreakFlame } from './components/StreakFlame';
 import { SeasonalEffects } from './components/SeasonalEffects';
 import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
-import { DailyQuests } from './components/DailyQuests';
-import { HabitTrackerPlus } from './components/HabitTrackerPlus';
-import { TimeTravel } from './components/TimeTravel';
-import { CityBuilder } from './components/CityBuilder';
 import { AISmartScheduler } from './components/AISmartScheduler';
 import { TaskDependencies } from './components/TaskDependencies';
 import { AutomationRules } from './components/AutomationRules';
@@ -318,23 +313,14 @@ function App() {
         {/* Energy Tracker */}
         <EnergyTracker />
 
-        {/* Daily Quests */}
-        <DailyQuests todos={todos} />
-
-        {/* City Builder */}
-        <CityBuilder todos={todos} />
-
-        {/* Habit Tracker Plus */}
-        <HabitTrackerPlus todos={todos} />
-
-        {/* Time Travel */}
-        <TimeTravel todos={todos} />
-
         {/* AI Smart Scheduler */}
         <AISmartScheduler todos={todos} onUpdateTodo={updateTodo} />
 
         {/* Task Dependencies with Gantt Chart */}
         <TaskDependencies todos={todos} onUpdateTodo={updateTodo} />
+
+        {/* Routine Library */}
+        <RoutineLibrary onApplyRoutine={addMultipleTodos} />
 
         {/* Automation Rules (IFTTT) */}
         <AutomationRules
@@ -342,12 +328,6 @@ function App() {
           onUpdateTodo={updateTodo}
           onCreateTodo={addTodo}
         />
-
-        {/* Routine Library */}
-        <RoutineLibrary onApplyRoutine={addMultipleTodos} />
-
-        {/* Export Panel */}
-        <ExportPanel todos={todos} />
 
         {/* Import Button */}
         <div className="flex justify-center">
