@@ -15,9 +15,9 @@ export function AdvancedStats({ todos }) {
     };
 
     const priorityData = [
-      { name: 'Alta', value: priorityDist.high, color: '#ef4444' },
-      { name: 'Media', value: priorityDist.medium, color: '#f59e0b' },
-      { name: 'Bassa', value: priorityDist.low, color: '#10b981' },
+      { name: 'Priorità Alta', value: priorityDist.high, color: '#ef4444' },
+      { name: 'Priorità Media', value: priorityDist.medium, color: '#f59e0b' },
+      { name: 'Priorità Bassa', value: priorityDist.low, color: '#10b981' },
     ];
 
     // Distribuzione per categoria
