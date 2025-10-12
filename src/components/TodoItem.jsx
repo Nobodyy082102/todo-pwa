@@ -19,63 +19,24 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
     low: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
   };
 
-  // Get color classes - using explicit conditionals for Tailwind compilation
-  // Get colors with inline styles to override glass-light/glass-dark
-  const getCustomColors = () => {
+  // Get text color for task title
+  const getTextColor = () => {
     if (!todo.color || todo.color === 'default') {
-      return { classes: priorityColors[todo.priority], style: {} };
+      return null; // Use default text color
     }
 
     const colorMap = {
-      red: {
-        border: 'border-l-red-400',
-        bgLight: 'rgba(254, 242, 242, 0.7)',
-        bgDark: 'rgba(127, 29, 29, 0.2)'
-      },
-      orange: {
-        border: 'border-l-orange-400',
-        bgLight: 'rgba(255, 247, 237, 0.7)',
-        bgDark: 'rgba(154, 52, 18, 0.2)'
-      },
-      yellow: {
-        border: 'border-l-yellow-400',
-        bgLight: 'rgba(254, 252, 232, 0.7)',
-        bgDark: 'rgba(133, 77, 14, 0.2)'
-      },
-      green: {
-        border: 'border-l-green-400',
-        bgLight: 'rgba(240, 253, 244, 0.7)',
-        bgDark: 'rgba(21, 128, 61, 0.2)'
-      },
-      blue: {
-        border: 'border-l-blue-400',
-        bgLight: 'rgba(239, 246, 255, 0.7)',
-        bgDark: 'rgba(29, 78, 216, 0.2)'
-      },
-      indigo: {
-        border: 'border-l-indigo-400',
-        bgLight: 'rgba(238, 242, 255, 0.7)',
-        bgDark: 'rgba(67, 56, 202, 0.2)'
-      },
-      purple: {
-        border: 'border-l-purple-400',
-        bgLight: 'rgba(250, 245, 255, 0.7)',
-        bgDark: 'rgba(107, 33, 168, 0.2)'
-      },
-      pink: {
-        border: 'border-l-pink-400',
-        bgLight: 'rgba(253, 242, 248, 0.7)',
-        bgDark: 'rgba(157, 23, 77, 0.2)'
-      }
+      red: '#dc2626',      // red-600
+      orange: '#ea580c',   // orange-600
+      yellow: '#ca8a04',   // yellow-600
+      green: '#16a34a',    // green-600
+      blue: '#2563eb',     // blue-600
+      indigo: '#4f46e5',   // indigo-600
+      purple: '#9333ea',   // purple-600
+      pink: '#db2777',     // pink-600
     };
 
-    const colors = colorMap[todo.color] || colorMap.red;
-    const isDark = document.documentElement.classList.contains('dark');
-
-    return {
-      classes: colors.border,
-      style: { backgroundColor: isDark ? colors.bgDark : colors.bgLight }
-    };
+    return colorMap[todo.color] || null;
   };
 
   // Get size classes - using explicit conditionals for Tailwind compilation
@@ -106,7 +67,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
     }
   };
 
-  const customColors = getCustomColors();
+  const textColor = getTextColor();
   const taskSize = getSizeClasses();
 
   // Debug logging
@@ -115,7 +76,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
     title: todo.title,
     color: todo.color,
     size: todo.size,
-    customColors,
+    textColor,
     taskSize
   });
 
@@ -144,8 +105,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
-      className={`border-l-4 rounded-xl ${taskSize.container} shadow-lg transition-all hover-lift glass-light dark:glass-dark border-r border-t border-b border-white/20 dark:border-white/10 ${customColors.classes} ${todo.completed ? 'opacity-60' : ''}`}
-      style={customColors.style}
+      className={`border-l-4 rounded-xl ${taskSize.container} shadow-lg transition-all hover-lift glass-light dark:glass-dark border-r border-t border-b border-white/20 dark:border-white/10 ${priorityColors[todo.priority]} ${todo.completed ? 'opacity-60' : ''}`}
     >
       <div className="flex items-start gap-3">
         <button
@@ -165,8 +125,9 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
               className={`${taskSize.title} ${
                 todo.completed
                   ? 'line-through text-gray-500 dark:text-gray-500'
-                  : 'text-gray-900 dark:text-white'
+                  : ''
               }`}
+              style={!todo.completed && textColor ? { color: textColor } : {}}
             >
               {todo.title}
             </h3>
