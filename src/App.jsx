@@ -18,13 +18,9 @@ import { AdvancedStats } from './components/AdvancedStats';
 import { GameStats } from './components/GameStats';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { FocusMode } from './components/FocusMode';
-import { VirtualPet } from './components/VirtualPet';
-import { StreakFlame } from './components/StreakFlame';
 import { SeasonalEffects } from './components/SeasonalEffects';
 import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
-import { AISmartScheduler } from './components/AISmartScheduler';
-import { TaskDependencies } from './components/TaskDependencies';
 import { RoutineLibrary } from './components/RoutineLibrary';
 import { BrowserCompatibility } from './components/BrowserCompatibility';
 import { filterTodos, searchTodos } from './utils/filterTodos';
@@ -299,23 +295,11 @@ function App() {
         {/* Advanced Statistics with Charts */}
         {todos.length > 0 && <AdvancedStats todos={todos} />}
 
-        {/* NEW FEATURES ROW 1 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <VirtualPet todos={todos} />
-          <StreakFlame todos={todos} />
-        </div>
-
         {/* Theme Switcher */}
         <ThemeSwitcher />
 
         {/* Energy Tracker */}
         <EnergyTracker />
-
-        {/* AI Smart Scheduler */}
-        <AISmartScheduler todos={todos} onUpdateTodo={updateTodo} />
-
-        {/* Task Dependencies with Gantt Chart */}
-        <TaskDependencies todos={todos} onUpdateTodo={updateTodo} />
 
         {/* Routine Library */}
         <RoutineLibrary onApplyRoutine={addMultipleTodos} />
