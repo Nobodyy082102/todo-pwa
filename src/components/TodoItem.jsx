@@ -70,16 +70,6 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
   const textColor = getTextColor();
   const taskSize = getSizeClasses();
 
-  // Debug logging
-  console.log('TodoItem Debug:', {
-    id: todo.id,
-    title: todo.title,
-    color: todo.color,
-    size: todo.size,
-    textColor,
-    taskSize
-  });
-
   const formatDateTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString('it-IT', {
