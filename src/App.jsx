@@ -18,7 +18,6 @@ import { AdvancedStats } from './components/AdvancedStats';
 import { GameStats } from './components/GameStats';
 import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { FocusMode } from './components/FocusMode';
-import { SeasonalEffects } from './components/SeasonalEffects';
 import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { RoutineLibrary } from './components/RoutineLibrary';
@@ -225,9 +224,6 @@ function App() {
 
       {/* Particelle ambiente */}
       <AmbientParticles />
-
-      {/* Seasonal Effects */}
-      <SeasonalEffects />
 
       {/* Particelle celebrative */}
       <ParticleEffect trigger={showParticles} type="confetti" />
