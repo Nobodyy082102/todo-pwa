@@ -19,46 +19,65 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
     low: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
   };
 
-  // Custom color mapping
-  const customColors = {
-    default: '',
-    red: 'border-l-red-400 bg-red-50/70 dark:bg-red-900/20',
-    orange: 'border-l-orange-400 bg-orange-50/70 dark:bg-orange-900/20',
-    yellow: 'border-l-yellow-400 bg-yellow-50/70 dark:bg-yellow-900/20',
-    green: 'border-l-green-400 bg-green-50/70 dark:bg-green-900/20',
-    blue: 'border-l-blue-400 bg-blue-50/70 dark:bg-blue-900/20',
-    indigo: 'border-l-indigo-400 bg-indigo-50/70 dark:bg-indigo-900/20',
-    purple: 'border-l-purple-400 bg-purple-50/70 dark:bg-purple-900/20',
-    pink: 'border-l-pink-400 bg-pink-50/70 dark:bg-pink-900/20',
+  // Get color classes - using explicit conditionals for Tailwind compilation
+  const getColorClasses = () => {
+    if (!todo.color || todo.color === 'default') {
+      return priorityColors[todo.priority];
+    }
+
+    // Explicit classes for Tailwind to compile
+    switch(todo.color) {
+      case 'red':
+        return 'border-l-red-400 bg-red-50/70 dark:bg-red-900/20';
+      case 'orange':
+        return 'border-l-orange-400 bg-orange-50/70 dark:bg-orange-900/20';
+      case 'yellow':
+        return 'border-l-yellow-400 bg-yellow-50/70 dark:bg-yellow-900/20';
+      case 'green':
+        return 'border-l-green-400 bg-green-50/70 dark:bg-green-900/20';
+      case 'blue':
+        return 'border-l-blue-400 bg-blue-50/70 dark:bg-blue-900/20';
+      case 'indigo':
+        return 'border-l-indigo-400 bg-indigo-50/70 dark:bg-indigo-900/20';
+      case 'purple':
+        return 'border-l-purple-400 bg-purple-50/70 dark:bg-purple-900/20';
+      case 'pink':
+        return 'border-l-pink-400 bg-pink-50/70 dark:bg-pink-900/20';
+      default:
+        return priorityColors[todo.priority];
+    }
   };
 
-  // Size mapping
-  const sizeClasses = {
-    small: {
-      container: 'p-3',
-      title: 'text-sm',
-      description: 'text-xs',
-      badge: 'text-xs px-1.5 py-0.5',
-    },
-    medium: {
-      container: 'p-4',
-      title: 'text-lg',
-      description: 'text-sm',
-      badge: 'text-xs px-2 py-1',
-    },
-    large: {
-      container: 'p-5',
-      title: 'text-xl',
-      description: 'text-base',
-      badge: 'text-sm px-2.5 py-1',
-    },
+  // Get size classes - using explicit conditionals for Tailwind compilation
+  const getSizeClasses = () => {
+    switch(todo.size) {
+      case 'small':
+        return {
+          container: 'p-3',
+          title: 'text-sm font-semibold',
+          description: 'text-xs',
+          badge: 'text-xs px-1.5 py-0.5',
+        };
+      case 'large':
+        return {
+          container: 'p-5',
+          title: 'text-xl font-semibold',
+          description: 'text-base',
+          badge: 'text-sm px-2.5 py-1',
+        };
+      case 'medium':
+      default:
+        return {
+          container: 'p-4',
+          title: 'text-lg font-semibold',
+          description: 'text-sm',
+          badge: 'text-xs px-2 py-1',
+        };
+    }
   };
 
-  // Apply custom color if set and not default, otherwise use priority color
-  const taskColor = (todo.color && todo.color !== 'default') ? customColors[todo.color] : priorityColors[todo.priority];
-
-  // Apply custom size if set, otherwise use medium
-  const taskSize = todo.size ? sizeClasses[todo.size] : sizeClasses.medium;
+  const taskColor = getColorClasses();
+  const taskSize = getSizeClasses();
 
   // Debug logging
   console.log('TodoItem Debug:', {
@@ -112,7 +131,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-1">
             <h3
-              className={`font-semibold ${taskSize.title} ${
+              className={`${taskSize.title} ${
                 todo.completed
                   ? 'line-through text-gray-500 dark:text-gray-500'
                   : 'text-gray-900 dark:text-white'
