@@ -25,7 +25,6 @@ import { EnergyTracker } from './components/EnergyTracker';
 import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { AISmartScheduler } from './components/AISmartScheduler';
 import { TaskDependencies } from './components/TaskDependencies';
-import { AutomationRules } from './components/AutomationRules';
 import { RoutineLibrary } from './components/RoutineLibrary';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
@@ -321,13 +320,6 @@ function App() {
 
         {/* Routine Library */}
         <RoutineLibrary onApplyRoutine={addMultipleTodos} />
-
-        {/* Automation Rules (IFTTT) */}
-        <AutomationRules
-          todos={todos}
-          onUpdateTodo={updateTodo}
-          onCreateTodo={addTodo}
-        />
 
         {/* Import Button */}
         <div className="flex justify-center">
