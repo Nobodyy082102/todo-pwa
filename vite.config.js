@@ -11,8 +11,8 @@ export default defineConfig({
     minify: 'terser', // Minificazione ottimizzata
     terserOptions: {
       compress: {
-        drop_console: true, // Rimuove console.log in produzione
-        drop_debugger: true,
+        drop_console: false, // Mantieni console per debugging
+        drop_debugger: false,
       },
     },
     rollupOptions: {
@@ -110,21 +110,9 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'any'
           }
-        ],
-        screenshots: [
-          {
-            src: 'screenshot1.png',
-            sizes: '540x960',
-            type: 'image/png',
-            form_factor: 'narrow'
-          },
-          {
-            src: 'screenshot2.png',
-            sizes: '540x960',
-            type: 'image/png',
-            form_factor: 'narrow'
-          }
         ]
+        // Screenshots rimossi temporaneamente - da aggiungere quando disponibili
+        // screenshots: [...]
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2,webmanifest}'],
