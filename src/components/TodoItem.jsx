@@ -20,32 +20,62 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
   };
 
   // Get color classes - using explicit conditionals for Tailwind compilation
-  const getColorClasses = () => {
+  // Get colors with inline styles to override glass-light/glass-dark
+  const getCustomColors = () => {
     if (!todo.color || todo.color === 'default') {
-      return priorityColors[todo.priority];
+      return { classes: priorityColors[todo.priority], style: {} };
     }
 
-    // Explicit classes for Tailwind to compile
-    switch(todo.color) {
-      case 'red':
-        return 'border-l-red-400 bg-red-50/70 dark:bg-red-900/20';
-      case 'orange':
-        return 'border-l-orange-400 bg-orange-50/70 dark:bg-orange-900/20';
-      case 'yellow':
-        return 'border-l-yellow-400 bg-yellow-50/70 dark:bg-yellow-900/20';
-      case 'green':
-        return 'border-l-green-400 bg-green-50/70 dark:bg-green-900/20';
-      case 'blue':
-        return 'border-l-blue-400 bg-blue-50/70 dark:bg-blue-900/20';
-      case 'indigo':
-        return 'border-l-indigo-400 bg-indigo-50/70 dark:bg-indigo-900/20';
-      case 'purple':
-        return 'border-l-purple-400 bg-purple-50/70 dark:bg-purple-900/20';
-      case 'pink':
-        return 'border-l-pink-400 bg-pink-50/70 dark:bg-pink-900/20';
-      default:
-        return priorityColors[todo.priority];
-    }
+    const colorMap = {
+      red: {
+        border: 'border-l-red-400',
+        bgLight: 'rgba(254, 242, 242, 0.7)',
+        bgDark: 'rgba(127, 29, 29, 0.2)'
+      },
+      orange: {
+        border: 'border-l-orange-400',
+        bgLight: 'rgba(255, 247, 237, 0.7)',
+        bgDark: 'rgba(154, 52, 18, 0.2)'
+      },
+      yellow: {
+        border: 'border-l-yellow-400',
+        bgLight: 'rgba(254, 252, 232, 0.7)',
+        bgDark: 'rgba(133, 77, 14, 0.2)'
+      },
+      green: {
+        border: 'border-l-green-400',
+        bgLight: 'rgba(240, 253, 244, 0.7)',
+        bgDark: 'rgba(21, 128, 61, 0.2)'
+      },
+      blue: {
+        border: 'border-l-blue-400',
+        bgLight: 'rgba(239, 246, 255, 0.7)',
+        bgDark: 'rgba(29, 78, 216, 0.2)'
+      },
+      indigo: {
+        border: 'border-l-indigo-400',
+        bgLight: 'rgba(238, 242, 255, 0.7)',
+        bgDark: 'rgba(67, 56, 202, 0.2)'
+      },
+      purple: {
+        border: 'border-l-purple-400',
+        bgLight: 'rgba(250, 245, 255, 0.7)',
+        bgDark: 'rgba(107, 33, 168, 0.2)'
+      },
+      pink: {
+        border: 'border-l-pink-400',
+        bgLight: 'rgba(253, 242, 248, 0.7)',
+        bgDark: 'rgba(157, 23, 77, 0.2)'
+      }
+    };
+
+    const colors = colorMap[todo.color] || colorMap.red;
+    const isDark = document.documentElement.classList.contains('dark');
+
+    return {
+      classes: colors.border,
+      style: { backgroundColor: isDark ? colors.bgDark : colors.bgLight }
+    };
   };
 
   // Get size classes - using explicit conditionals for Tailwind compilation
@@ -76,7 +106,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
     }
   };
 
-  const taskColor = getColorClasses();
+  const customColors = getCustomColors();
   const taskSize = getSizeClasses();
 
   // Debug logging
@@ -85,7 +115,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
     title: todo.title,
     color: todo.color,
     size: todo.size,
-    taskColor,
+    customColors,
     taskSize
   });
 
@@ -114,7 +144,8 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
-      className={`border-l-4 rounded-xl ${taskSize.container} shadow-lg transition-all hover-lift glass-light dark:glass-dark border-r border-t border-b border-white/20 dark:border-white/10 ${taskColor} ${todo.completed ? 'opacity-60' : ''}`}
+      className={`border-l-4 rounded-xl ${taskSize.container} shadow-lg transition-all hover-lift glass-light dark:glass-dark border-r border-t border-b border-white/20 dark:border-white/10 ${customColors.classes} ${todo.completed ? 'opacity-60' : ''}`}
+      style={customColors.style}
     >
       <div className="flex items-start gap-3">
         <button
