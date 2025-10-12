@@ -54,21 +54,24 @@ export function useNotifications() {
   }, [permission]);
 
   const closeNotification = useCallback((tag) => {
-    const notification = activeNotifications.get(tag);
-    if (notification) {
-      notification.close();
-      setActiveNotifications(prev => {
+    setActiveNotifications(prev => {
+      const notification = prev.get(tag);
+      if (notification) {
+        notification.close();
         const newMap = new Map(prev);
         newMap.delete(tag);
         return newMap;
-      });
-    }
-  }, [activeNotifications]);
+      }
+      return prev;
+    });
+  }, []);
 
   const closeAllNotifications = useCallback(() => {
-    activeNotifications.forEach(notification => notification.close());
-    setActiveNotifications(new Map());
-  }, [activeNotifications]);
+    setActiveNotifications(prev => {
+      prev.forEach(notification => notification.close());
+      return new Map();
+    });
+  }, []);
 
   return {
     permission,

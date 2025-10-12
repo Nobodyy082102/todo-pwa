@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { useTheme } from './hooks/useTheme';
 import { useSoundEffects } from './hooks/useSoundEffects';
@@ -26,6 +26,7 @@ import { ParticleEffect, AmbientParticles } from './components/ParticleEffect';
 import { AISmartScheduler } from './components/AISmartScheduler';
 import { TaskDependencies } from './components/TaskDependencies';
 import { RoutineLibrary } from './components/RoutineLibrary';
+import { BrowserCompatibility } from './components/BrowserCompatibility';
 import { filterTodos, searchTodos } from './utils/filterTodos';
 import { getSharedTodoFromUrl, clearShareParamFromUrl } from './utils/shareUtils';
 import { checkNewAchievements } from './utils/achievements';
@@ -90,59 +91,57 @@ function App() {
     }
   }, [todos]);
 
-  const addTodo = (todo) => {
-    setTodos([...todos, todo]);
+  const addTodo = useCallback((todo) => {
+    setTodos(prev => [...prev, todo]);
     setTaskAddedTrigger(prev => prev + 1); // Trigger elefantino
-  };
+  }, []);
 
-  const addMultipleTodos = (newTodos) => {
-    setTodos([...todos, ...newTodos]);
+  const addMultipleTodos = useCallback((newTodos) => {
+    setTodos(prev => [...prev, ...newTodos]);
     setTaskAddedTrigger(prev => prev + newTodos.length); // Trigger elefantino per ogni task
-  };
+  }, []);
 
-  const toggleTodo = (id) => {
-    const todo = todos.find(t => t.id === id);
-    if (todo && !todo.completed) {
-      // Trigger solo quando completi (non quando de-completi)
-      setTaskCompletedTrigger(prev => prev + 1);
+  const toggleTodo = useCallback((id) => {
+    setTodos(prev => {
+      const todo = prev.find(t => t.id === id);
+      if (todo && !todo.completed) {
+        // Trigger solo quando completi (non quando de-completi)
+        setTaskCompletedTrigger(count => count + 1);
 
-      // Particelle celebrative!
-      setShowParticles(true);
-      setTimeout(() => setShowParticles(false), 1500);
+        // Particelle celebrative!
+        setShowParticles(true);
+        setTimeout(() => setShowParticles(false), 1500);
 
-      // Suono di completamento!
-      playTaskComplete();
+        // Suono di completamento!
+        playTaskComplete();
 
-      // Aggiungi timestamp completamento per stats
-      setTodos(
-        todos.map((t) =>
+        // Aggiungi timestamp completamento per stats
+        return prev.map((t) =>
           t.id === id ? { ...t, completed: true, completedAt: Date.now() } : t
-        )
-      );
-    } else {
-      setTodos(
-        todos.map((todo) =>
+        );
+      } else {
+        return prev.map((todo) =>
           todo.id === id ? { ...todo, completed: !todo.completed } : todo
-        )
-      );
-    }
-  };
+        );
+      }
+    });
+  }, [playTaskComplete]);
 
-  const deleteTodo = (id) => {
+  const deleteTodo = useCallback((id) => {
     playDelete();
-    setTodos(todos.filter((todo) => todo.id !== id));
-  };
+    setTodos(prev => prev.filter((todo) => todo.id !== id));
+  }, [playDelete]);
 
-  const updateTodo = (updatedTodo) => {
-    setTodos(todos.map((todo) =>
+  const updateTodo = useCallback((updatedTodo) => {
+    setTodos(prev => prev.map((todo) =>
       todo.id === updatedTodo.id ? updatedTodo : todo
     ));
-  };
+  }, []);
 
-  const snoozeTodo = (id, minutes) => {
+  const snoozeTodo = useCallback((id, minutes) => {
     playSnooze();
-    setTodos(
-      todos.map((todo) => {
+    setTodos(prev =>
+      prev.map((todo) => {
         if (todo.id !== id || !todo.reminder) return todo;
 
         const snoozeTime = minutes * 60 * 1000; // Converti minuti in millisecondi
@@ -168,7 +167,7 @@ function App() {
         return todo;
       })
     );
-  };
+  }, [playSnooze]);
 
   const reorderTodos = (newOrder, isCompleted) => {
     const pendingTodos = todos.filter((todo) => !todo.completed);
@@ -444,6 +443,9 @@ function App() {
           <p>Task Manager - Funziona offline</p>
         </div>
       </footer>
+
+      {/* Browser Compatibility Warnings */}
+      <BrowserCompatibility />
     </div>
   );
 }
