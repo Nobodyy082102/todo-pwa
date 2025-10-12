@@ -60,6 +60,16 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
   // Apply custom size if set, otherwise use medium
   const taskSize = todo.size ? sizeClasses[todo.size] : sizeClasses.medium;
 
+  // Debug logging
+  console.log('TodoItem Debug:', {
+    id: todo.id,
+    title: todo.title,
+    color: todo.color,
+    size: todo.size,
+    taskColor,
+    taskSize
+  });
+
   const formatDateTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString('it-IT', {

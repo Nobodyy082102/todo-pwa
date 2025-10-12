@@ -48,6 +48,8 @@ export function TodoForm({ onAdd }) {
       size,
     };
 
+    console.log('TodoForm - Creating task with:', { color, size, todo });
+
     onAdd(todo);
 
     // Reset form
