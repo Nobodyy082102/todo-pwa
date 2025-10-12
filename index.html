@@ -2,22 +2,54 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
-    <meta name="description" content="Task Manager professionale con supporto offline e notifiche" />
-    <meta name="theme-color" content="#2563eb" />
 
-    <!-- PWA Meta Tags -->
+    <!-- Primary Meta Tags -->
+    <title>Task Manager - Gestione Professionale Attività</title>
+    <meta name="title" content="Task Manager - Gestione Professionale Attività" />
+    <meta name="description" content="Task Manager professionale con supporto offline, notifiche, statistiche e modalità focus. PWA installabile su tutti i dispositivi." />
+    <meta name="keywords" content="task manager, todo list, gestione attività, PWA, offline, notifiche, produttività" />
+    <meta name="author" content="Task Manager" />
+
+    <!-- Theme & PWA -->
+    <meta name="theme-color" content="#2563eb" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Task Manager" />
 
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <title>Task Manager - Gestione Professionale Attività</title>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nobodyy082102.github.io/todo-pwa/" />
+    <meta property="og:title" content="Task Manager - Gestione Professionale Attività" />
+    <meta property="og:description" content="Task Manager professionale con supporto offline, notifiche e statistiche. Installabile come app!" />
+    <meta property="og:image" content="https://nobodyy082102.github.io/todo-pwa/pwa-512x512.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://nobodyy082102.github.io/todo-pwa/" />
+    <meta property="twitter:title" content="Task Manager - Gestione Professionale Attività" />
+    <meta property="twitter:description" content="Task Manager professionale con supporto offline, notifiche e statistiche. Installabile come app!" />
+    <meta property="twitter:image" content="https://nobodyy082102.github.io/todo-pwa/pwa-512x512.png" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://nobodyy082102.github.io/todo-pwa/" />
+
+    <!-- Icons - usando path relativi per compatibilità -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
   </head>
   <body>
+    <noscript>
+      <div style="padding: 20px; text-align: center; font-family: system-ui, -apple-system, sans-serif;">
+        <h1>⚠️ JavaScript Richiesto</h1>
+        <p>Questa applicazione richiede JavaScript per funzionare.</p>
+        <p>Per favore abilita JavaScript nelle impostazioni del tuo browser e ricarica la pagina.</p>
+      </div>
+    </noscript>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="./src/main.jsx"></script>
   </body>
 </html>

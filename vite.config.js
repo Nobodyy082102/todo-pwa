@@ -4,11 +4,27 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   base: '/todo-pwa/',
+  build: {
+    // Ottimizzazioni per compatibilità
+    target: 'es2015', // Supporto per browser più vecchi
+    cssTarget: 'chrome61', // CSS compatibile con browser moderni
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          icons: ['lucide-react'],
+        }
+      }
+    }
+  },
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
+      includeAssets: ['favicon-32x32.png', 'apple-touch-icon.png', 'icon.svg', 'pwa-192x192.png', 'pwa-512x512.png'],
+      devOptions: {
+        enabled: false // Disabilita PWA in dev per evitare problemi
+      },
       manifest: {
         name: 'Task Manager - Gestione Professionale',
         short_name: 'TaskManager',
@@ -20,6 +36,8 @@ export default defineConfig({
         start_url: '/todo-pwa/',
         orientation: 'any',
         categories: ['productivity', 'business'],
+        lang: 'it',
+        dir: 'ltr',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -31,7 +49,13 @@ export default defineConfig({
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
+          },
+          {
+            src: 'pwa-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ]
       },
@@ -41,6 +65,9 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
+        // Aumenta la navigazione fallback per compatibilità
+        navigateFallback: '/todo-pwa/index.html',
+        navigateFallbackDenylist: [/^\/api/, /\.(png|jpg|jpeg|svg|gif|webp)$/],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
