@@ -38,13 +38,13 @@ export function FloralEffect({ trigger, position }) {
 
   return (
     <div
-      className="absolute inset-0 pointer-events-none z-50 overflow-visible"
+      className="fixed inset-0 pointer-events-none z-50 overflow-visible"
       style={{
-        position: 'absolute',
+        position: 'fixed',
         top: 0,
         left: 0,
-        width: '100%',
-        height: '100%',
+        width: '100vw',
+        height: '100vh',
       }}
     >
       <AnimatePresence>
