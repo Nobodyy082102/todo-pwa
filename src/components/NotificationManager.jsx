@@ -1,32 +1,10 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNotifications } from '../hooks/useNotifications';
 
 export function NotificationManager({ todos, onSnooze, onComplete }) {
   const { permission, showNotification, closeNotification } = useNotifications();
   const checkIntervalRef = useRef(null);
   const notifiedTodosRef = useRef(new Set());
-
-  // Handler per service worker messages (definito una sola volta)
-  const handleServiceWorkerMessage = useCallback((event) => {
-    if (event.data.type === 'NOTIFICATION_ACTION') {
-      if (event.data.action === 'complete') {
-        onComplete(event.data.todoId);
-      } else if (event.data.action === 'snooze') {
-        onSnooze(event.data.todoId, 30);
-      }
-    }
-  }, [onComplete, onSnooze]);
-
-  // Registra event listener per service worker una sola volta
-  useEffect(() => {
-    if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-      navigator.serviceWorker.addEventListener('message', handleServiceWorkerMessage);
-
-      return () => {
-        navigator.serviceWorker.removeEventListener('message', handleServiceWorkerMessage);
-      };
-    }
-  }, [handleServiceWorkerMessage]);
 
   useEffect(() => {
     if (permission !== 'granted') return;
@@ -54,14 +32,11 @@ export function NotificationManager({ todos, onSnooze, onComplete }) {
           closeNotification(`todo-${todo.id}`);
 
           const notification = showNotification(todo.title, {
-            body: todo.description || 'Completa questa attività!',
+            body: todo.description || 'Clicca per completare questa attività',
             tag: `todo-${todo.id}`,
             requireInteraction: true,
             vibrate: [200, 100, 200],
-            actions: [
-              { action: 'complete', title: 'Completa' },
-              { action: 'snooze', title: 'Snooze 30min' },
-            ],
+            silent: false,
           });
 
           if (notification) {
@@ -70,8 +45,9 @@ export function NotificationManager({ todos, onSnooze, onComplete }) {
               notifiedTodosRef.current.add(todo.id);
             }
 
-            // Gestisci click sulla notifica
+            // Gestisci click sulla notifica - completa il TODO
             notification.onclick = () => {
+              window.focus();
               onComplete(todo.id);
               notification.close();
             };

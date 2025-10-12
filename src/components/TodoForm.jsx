@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Clock, Repeat } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { FloralEffect } from './FloralEffect';
+import { CategorySelector } from './CategorySelector';
 
 export function TodoForm({ onAdd }) {
   const [title, setTitle] = useState('');
@@ -11,8 +11,7 @@ export function TodoForm({ onAdd }) {
   const [reminderDate, setReminderDate] = useState('');
   const [reminderTime, setReminderTime] = useState('');
   const [recurringHours, setRecurringHours] = useState(24);
-  const [flowerTrigger, setFlowerTrigger] = useState(0);
-  const [flowerPosition, setFlowerPosition] = useState({ x: 0, y: 0 });
+  const [categories, setCategories] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,6 +41,7 @@ export function TodoForm({ onAdd }) {
       completed: false,
       createdAt: Date.now(),
       reminder,
+      categories,
     };
 
     onAdd(todo);
@@ -54,41 +54,29 @@ export function TodoForm({ onAdd }) {
     setReminderDate('');
     setReminderTime('');
     setRecurringHours(24);
-  };
-
-  const handlePriorityClick = (p, event) => {
-    setPriority(p);
-
-    // Ottieni la posizione del click relativa alla viewport (per fixed positioning)
-    const buttonRect = event.currentTarget.getBoundingClientRect();
-    setFlowerPosition({
-      x: buttonRect.left + buttonRect.width / 2,
-      y: buttonRect.top + buttonRect.height / 2,
-    });
-    setFlowerTrigger(prev => prev + 1);
+    setCategories([]);
   };
 
   const priorityColors = {
-    high: 'border-red-500 bg-gradient-to-br from-red-100 to-pink-100 dark:from-red-900/30 dark:to-pink-900/30 shadow-lg shadow-red-200/50 dark:shadow-red-900/20',
-    medium: 'border-yellow-500 bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 shadow-lg shadow-yellow-200/50 dark:shadow-yellow-900/20',
-    low: 'border-green-500 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 shadow-lg shadow-green-200/50 dark:shadow-green-900/20',
+    high: 'border-red-600 bg-red-50 dark:bg-red-900/20',
+    medium: 'border-amber-600 bg-amber-50 dark:bg-amber-900/20',
+    low: 'border-slate-600 bg-slate-50 dark:bg-slate-900/20',
   };
 
   const priorityLabels = {
-    high: { text: 'Alta', emoji: '🔥' },
-    medium: { text: 'Media', emoji: '⚡' },
-    low: { text: 'Bassa', emoji: '🌿' },
+    high: 'Priorità',
+    medium: 'Poca priorità',
+    low: 'Task semplice',
   };
 
   return (
     <motion.form
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       onSubmit={handleSubmit}
-      className="relative bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 space-y-4 overflow-visible"
+      className="glass-light dark:glass-dark rounded-2xl shadow-lg p-6 space-y-4 hover-lift border border-white/20 dark:border-white/10"
     >
-      <FloralEffect trigger={flowerTrigger} position={flowerPosition} />
       <div>
         <input
           type="text"
@@ -111,25 +99,27 @@ export function TodoForm({ onAdd }) {
         />
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-3 gap-2">
         {['high', 'medium', 'low'].map((p) => (
-          <motion.button
+          <button
             key={p}
             type="button"
-            onClick={(e) => handlePriorityClick(p, e)}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-            className={`px-4 py-3 rounded-xl border-2 transition-all font-semibold flex items-center justify-center gap-2 ${
+            onClick={() => setPriority(p)}
+            className={`px-4 py-2.5 rounded-lg border-2 transition-all font-medium text-sm ${
               priority === p
-                ? priorityColors[p] + ' scale-105'
+                ? priorityColors[p]
                 : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800'
             }`}
           >
-            <span className="text-xl">{priorityLabels[p].emoji}</span>
-            <span>{priorityLabels[p].text}</span>
-          </motion.button>
+            {priorityLabels[p]}
+          </button>
         ))}
       </div>
+
+      <CategorySelector
+        selectedCategories={categories}
+        onChange={setCategories}
+      />
 
       <div className="space-y-3">
         <div className="flex items-center gap-2">

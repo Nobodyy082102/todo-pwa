@@ -29,10 +29,15 @@ export function useNotifications() {
       return null;
     }
 
+    // Determina il base path corretto (per GitHub Pages o locale)
+    const basePath = import.meta.env.BASE_URL || '/';
+    const iconPath = `${basePath}pwa-192x192.png`.replace('//', '/');
+
     const notification = new Notification(title, {
-      icon: '/pwa-192x192.png',
-      badge: '/pwa-192x192.png',
+      icon: iconPath,
+      badge: iconPath,
       requireInteraction: true, // La notifica rimane visibile
+      vibrate: [200, 100, 200], // Pattern di vibrazione
       ...options,
     });
 
@@ -49,24 +54,21 @@ export function useNotifications() {
   }, [permission]);
 
   const closeNotification = useCallback((tag) => {
-    setActiveNotifications(prev => {
-      const notification = prev.get(tag);
-      if (notification) {
-        notification.close();
+    const notification = activeNotifications.get(tag);
+    if (notification) {
+      notification.close();
+      setActiveNotifications(prev => {
         const newMap = new Map(prev);
         newMap.delete(tag);
         return newMap;
-      }
-      return prev;
-    });
-  }, []);
+      });
+    }
+  }, [activeNotifications]);
 
   const closeAllNotifications = useCallback(() => {
-    setActiveNotifications(prev => {
-      prev.forEach(notification => notification.close());
-      return new Map();
-    });
-  }, []);
+    activeNotifications.forEach(notification => notification.close());
+    setActiveNotifications(new Map());
+  }, [activeNotifications]);
 
   return {
     permission,
