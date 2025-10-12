@@ -54,8 +54,11 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
     },
   };
 
-  const taskColor = todo.color && customColors[todo.color] ? customColors[todo.color] : priorityColors[todo.priority];
-  const taskSize = todo.size && sizeClasses[todo.size] ? sizeClasses[todo.size] : sizeClasses.medium;
+  // Apply custom color if set and not default, otherwise use priority color
+  const taskColor = (todo.color && todo.color !== 'default') ? customColors[todo.color] : priorityColors[todo.priority];
+
+  // Apply custom size if set, otherwise use medium
+  const taskSize = todo.size ? sizeClasses[todo.size] : sizeClasses.medium;
 
   const formatDateTime = (timestamp) => {
     const date = new Date(timestamp);
