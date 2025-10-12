@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Clock, Repeat } from 'lucide-react';
+import { Plus, Clock, Repeat, Palette, Type } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { CategorySelector } from './CategorySelector';
 
@@ -12,6 +12,8 @@ export function TodoForm({ onAdd }) {
   const [reminderTime, setReminderTime] = useState('');
   const [recurringHours, setRecurringHours] = useState(24);
   const [categories, setCategories] = useState([]);
+  const [color, setColor] = useState('default');
+  const [size, setSize] = useState('medium');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,6 +44,8 @@ export function TodoForm({ onAdd }) {
       createdAt: Date.now(),
       reminder,
       categories,
+      color,
+      size,
     };
 
     onAdd(todo);
@@ -55,6 +59,8 @@ export function TodoForm({ onAdd }) {
     setReminderTime('');
     setRecurringHours(24);
     setCategories([]);
+    setColor('default');
+    setSize('medium');
   };
 
   const priorityColors = {
@@ -68,6 +74,24 @@ export function TodoForm({ onAdd }) {
     medium: 'Poca priorità',
     low: 'Task semplice',
   };
+
+  const colorOptions = [
+    { value: 'default', label: 'Default', class: 'bg-gray-200 dark:bg-gray-700' },
+    { value: 'red', label: 'Rosso', class: 'bg-red-400' },
+    { value: 'orange', label: 'Arancione', class: 'bg-orange-400' },
+    { value: 'yellow', label: 'Giallo', class: 'bg-yellow-400' },
+    { value: 'green', label: 'Verde', class: 'bg-green-400' },
+    { value: 'blue', label: 'Blu', class: 'bg-blue-400' },
+    { value: 'indigo', label: 'Indaco', class: 'bg-indigo-400' },
+    { value: 'purple', label: 'Viola', class: 'bg-purple-400' },
+    { value: 'pink', label: 'Rosa', class: 'bg-pink-400' },
+  ];
+
+  const sizeOptions = [
+    { value: 'small', label: 'Piccola', icon: 'text-sm' },
+    { value: 'medium', label: 'Media', icon: 'text-base' },
+    { value: 'large', label: 'Grande', icon: 'text-lg' },
+  ];
 
   return (
     <motion.form
@@ -120,6 +144,53 @@ export function TodoForm({ onAdd }) {
         selectedCategories={categories}
         onChange={setCategories}
       />
+
+      {/* Selezione Colore */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <Palette size={18} className="text-gray-600 dark:text-gray-400" />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Colore Task</label>
+        </div>
+        <div className="grid grid-cols-9 gap-2">
+          {colorOptions.map((colorOption) => (
+            <button
+              key={colorOption.value}
+              type="button"
+              onClick={() => setColor(colorOption.value)}
+              className={`h-10 w-full rounded-lg transition-all ${colorOption.class} ${
+                color === colorOption.value
+                  ? 'ring-4 ring-indigo-500 scale-110'
+                  : 'hover:scale-105'
+              }`}
+              title={colorOption.label}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Selezione Dimensione */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <Type size={18} className="text-gray-600 dark:text-gray-400" />
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Dimensione Task</label>
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          {sizeOptions.map((sizeOption) => (
+            <button
+              key={sizeOption.value}
+              type="button"
+              onClick={() => setSize(sizeOption.value)}
+              className={`px-4 py-2 rounded-lg border-2 transition-all font-medium ${
+                size === sizeOption.value
+                  ? 'bg-indigo-100 border-indigo-500 dark:bg-indigo-900/40 dark:border-indigo-400'
+                  : 'border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 bg-white dark:bg-gray-800'
+              }`}
+            >
+              <span className={sizeOption.icon}>{sizeOption.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="space-y-3">
         <div className="flex items-center gap-2">

@@ -19,6 +19,44 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
     low: 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300',
   };
 
+  // Custom color mapping
+  const customColors = {
+    default: '',
+    red: 'border-l-red-400 bg-red-50/70 dark:bg-red-900/20',
+    orange: 'border-l-orange-400 bg-orange-50/70 dark:bg-orange-900/20',
+    yellow: 'border-l-yellow-400 bg-yellow-50/70 dark:bg-yellow-900/20',
+    green: 'border-l-green-400 bg-green-50/70 dark:bg-green-900/20',
+    blue: 'border-l-blue-400 bg-blue-50/70 dark:bg-blue-900/20',
+    indigo: 'border-l-indigo-400 bg-indigo-50/70 dark:bg-indigo-900/20',
+    purple: 'border-l-purple-400 bg-purple-50/70 dark:bg-purple-900/20',
+    pink: 'border-l-pink-400 bg-pink-50/70 dark:bg-pink-900/20',
+  };
+
+  // Size mapping
+  const sizeClasses = {
+    small: {
+      container: 'p-3',
+      title: 'text-sm',
+      description: 'text-xs',
+      badge: 'text-xs px-1.5 py-0.5',
+    },
+    medium: {
+      container: 'p-4',
+      title: 'text-lg',
+      description: 'text-sm',
+      badge: 'text-xs px-2 py-1',
+    },
+    large: {
+      container: 'p-5',
+      title: 'text-xl',
+      description: 'text-base',
+      badge: 'text-sm px-2.5 py-1',
+    },
+  };
+
+  const taskColor = todo.color && customColors[todo.color] ? customColors[todo.color] : priorityColors[todo.priority];
+  const taskSize = todo.size && sizeClasses[todo.size] ? sizeClasses[todo.size] : sizeClasses.medium;
+
   const formatDateTime = (timestamp) => {
     const date = new Date(timestamp);
     return date.toLocaleString('it-IT', {
@@ -44,9 +82,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
       whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
-      className={`border-l-4 rounded-xl p-4 shadow-lg transition-all hover-lift glass-light dark:glass-dark border-r border-t border-b border-white/20 dark:border-white/10 ${
-        priorityColors[todo.priority]
-      } ${todo.completed ? 'opacity-60' : ''}`}
+      className={`border-l-4 rounded-xl ${taskSize.container} shadow-lg transition-all hover-lift glass-light dark:glass-dark border-r border-t border-b border-white/20 dark:border-white/10 ${taskColor} ${todo.completed ? 'opacity-60' : ''}`}
     >
       <div className="flex items-start gap-3">
         <button
@@ -63,7 +99,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-1">
             <h3
-              className={`font-semibold text-lg ${
+              className={`font-semibold ${taskSize.title} ${
                 todo.completed
                   ? 'line-through text-gray-500 dark:text-gray-500'
                   : 'text-gray-900 dark:text-white'
@@ -72,7 +108,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
               {todo.title}
             </h3>
             <span
-              className={`text-xs px-2 py-1 rounded-full whitespace-nowrap ${
+              className={`${taskSize.badge} rounded-full whitespace-nowrap ${
                 priorityBadgeColors[todo.priority]
               }`}
             >
@@ -81,7 +117,7 @@ export function TodoItem({ todo, onToggle, onDelete, onSnooze }) {
           </div>
 
           {todo.description && (
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{todo.description}</p>
+            <p className={`${taskSize.description} text-gray-600 dark:text-gray-400 mb-2`}>{todo.description}</p>
           )}
 
           {todo.categories && todo.categories.length > 0 && (
