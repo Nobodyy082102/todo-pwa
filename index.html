@@ -1,55 +1,1067 @@
-<!doctype html>
-<html lang="it">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Quest & Reward | กิจกรรมร่วมสนุกรับของที่ระลึก</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Prompt -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- QRCode Generator -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body { font-family: 'Prompt', sans-serif; background-color: #f8fafc; }
+    .tab-active { background-color: #4f46e5; color: white; border-color: #4f46e5; }
+    .pin-pulse { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(79, 70, 229, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(79, 70, 229, 0); }
+    }
+  </style>
+</head>
+<body class="text-slate-800 antialiased pb-20">
 
-    <!-- Primary Meta Tags -->
-    <title>Task Manager - Gestione Professionale Attività</title>
-    <meta name="title" content="Task Manager - Gestione Professionale Attività" />
-    <meta name="description" content="Task Manager professionale con supporto offline, notifiche, statistiche e modalità focus. PWA installabile su tutti i dispositivi." />
-    <meta name="keywords" content="task manager, todo list, gestione attività, PWA, offline, notifiche, produttività" />
-    <meta name="author" content="Task Manager" />
-
-    <!-- Theme & PWA -->
-    <meta name="theme-color" content="#2563eb" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Task Manager" />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://nobodyy082102.github.io/todo-pwa/" />
-    <meta property="og:title" content="Task Manager - Gestione Professionale Attività" />
-    <meta property="og:description" content="Task Manager professionale con supporto offline, notifiche e statistiche. Installabile come app!" />
-    <meta property="og:image" content="https://nobodyy082102.github.io/todo-pwa/pwa-512x512.png" />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://nobodyy082102.github.io/todo-pwa/" />
-    <meta property="twitter:title" content="Task Manager - Gestione Professionale Attività" />
-    <meta property="twitter:description" content="Task Manager professionale con supporto offline, notifiche e statistiche. Installabile come app!" />
-    <meta property="twitter:image" content="https://nobodyy082102.github.io/todo-pwa/pwa-512x512.png" />
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://nobodyy082102.github.io/todo-pwa/" />
-
-    <!-- Icons - usando path relativi per compatibilità -->
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png" />
-    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
-    <link rel="manifest" href="./manifest.webmanifest" />
-  </head>
-  <body>
-    <noscript>
-      <div style="padding: 20px; text-align: center; font-family: system-ui, -apple-system, sans-serif;">
-        <h1>⚠️ JavaScript Richiesto</h1>
-        <p>Questa applicazione richiede JavaScript per funzionare.</p>
-        <p>Per favore abilita JavaScript nelle impostazioni del tuo browser e ricarica la pagina.</p>
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md sticky top-0 z-40">
+    <div class="max-w-xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div>
+        <h1 class="font-bold text-lg leading-tight" id="ui-event-name">Expo Discovery 2026</h1>
+        <p class="text-xs text-indigo-100">ทำภารกิจครบ 4 ขั้นตอน รับของที่ระลึก & E-Book</p>
       </div>
-    </noscript>
-    <div id="root"></div>
-    <script type="module" src="./src/main.jsx"></script>
-  </body>
+      <div class="text-right flex items-center gap-2">
+        <div class="bg-white/20 backdrop-blur px-2.5 py-1 rounded-lg text-xs">
+          คูปองคงเหลือ: <span id="ui-remaining-coupons" class="font-bold text-amber-300">-</span>
+        </div>
+        <button onclick="openAdminModal()" title="สำหรับเจ้าหน้าที่" class="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-xs">
+          ⚙️
+        </button>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="bg-indigo-900/30 px-4 py-2">
+      <div class="max-w-xl mx-auto">
+        <div class="flex justify-between text-xs mb-1 text-indigo-100">
+          <span>ความคืบหน้าภารกิจ</span>
+          <span id="ui-progress-text">0 / 4 สำเร็จ</span>
+        </div>
+        <div class="w-full bg-indigo-950/50 rounded-full h-2">
+          <div id="ui-progress-bar" class="bg-amber-400 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-xl mx-auto px-4 pt-4">
+
+    <!-- Step Navigation Tabs -->
+    <nav class="grid grid-cols-5 gap-1.5 mb-5 text-center text-[11px] font-medium">
+      <button onclick="switchTab(1)" id="tab-btn-1" class="tab-btn py-2 px-1 rounded-xl border bg-white shadow-sm flex flex-col items-center gap-1 transition">
+        <span id="status-icon-1">1️⃣</span>
+        <span>ลงทะเบียน</span>
+      </button>
+      <button onclick="switchTab(2)" id="tab-btn-2" class="tab-btn py-2 px-1 rounded-xl border bg-white shadow-sm flex flex-col items-center gap-1 transition">
+        <span id="status-icon-2">🗺️</span>
+        <span>แผนที่งาน</span>
+      </button>
+      <button onclick="switchTab(3)" id="tab-btn-3" class="tab-btn py-2 px-1 rounded-xl border bg-white shadow-sm flex flex-col items-center gap-1 transition">
+        <span id="status-icon-3">❓</span>
+        <span>Quiz</span>
+      </button>
+      <button onclick="switchTab(4)" id="tab-btn-4" class="tab-btn py-2 px-1 rounded-xl border bg-white shadow-sm flex flex-col items-center gap-1 transition">
+        <span id="status-icon-4">📸</span>
+        <span>แชร์ภาพ</span>
+      </button>
+      <button onclick="switchTab(5)" id="tab-btn-5" class="tab-btn py-2 px-1 rounded-xl border bg-white shadow-sm flex flex-col items-center gap-1 transition">
+        <span id="status-icon-5">🎁</span>
+        <span>รับรางวัล</span>
+      </button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- PAGE 1: ลงทะเบียน (Registration) -->
+    <!-- ========================================== -->
+    <section id="page-1" class="page-section bg-white rounded-2xl shadow-sm border p-5">
+      <div class="mb-4">
+        <span class="inline-block px-2.5 py-0.5 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full mb-1">ภารกิจที่ 1</span>
+        <h2 class="text-xl font-bold text-slate-800">ลงทะเบียนร่วมกิจกรรม</h2>
+        <p class="text-sm text-slate-500">กรอกข้อมูลเพื่อเริ่มสะสมภารกิจและรับสิทธิ์แลกของที่ระลึก</p>
+      </div>
+
+      <form id="register-form" onsubmit="handleRegister(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">ชื่อ - นามสกุล <span class="text-red-500">*</span></label>
+          <input type="text" id="reg-name" required placeholder="เช่น สมชาย ใจดี"
+            class="w-full px-3.5 py-2.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">เบอร์โทรศัพท์ <span class="text-red-500">*</span></label>
+          <input type="tel" id="reg-phone" required pattern="[0-9]{9,10}" placeholder="0812345678"
+            class="w-full px-3.5 py-2.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">อีเมล (สำหรับรับข้อมูล/E-Book) <span class="text-red-500">*</span></label>
+          <input type="email" id="reg-email" required placeholder="example@email.com"
+            class="w-full px-3.5 py-2.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">กลุ่มผู้เข้าร่วม</label>
+          <select id="reg-group" class="w-full px-3.5 py-2.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm bg-white">
+            <option value="บุคคลทั่วไป">บุคคลทั่วไป</option>
+            <option value="นักเรียน / นักศึกษา">นักเรียน / นักศึกษา</option>
+            <option value="เจ้าของธุรกิจ / ผู้ประกอบการ">เจ้าของธุรกิจ / ผู้ประกอบการ</option>
+            <option value="สื่อมวลชน / พาร์ทเนอร์">สื่อมวลชน / พาร์ทเนอร์</option>
+          </select>
+        </div>
+
+        <label class="flex items-start gap-2.5 text-xs text-slate-600 cursor-pointer pt-1">
+          <input type="checkbox" id="reg-pdpa" required class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500" />
+          <span>ยินยอมให้ผู้จัดงานเก็บข้อมูลส่วนบุคคลเพื่อใช้ในการร่วมกิจกรรม ยืนยันสิทธิ์รับรางวัล และจัดส่งข้อมูลข่าวสารตามนโยบาย PDPA</span>
+        </label>
+
+        <button type="submit" id="btn-register-submit"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow transition">
+          ลงทะเบียนและเริ่มกิจกรรม →
+        </button>
+      </form>
+
+      <!-- Registered Summary Card (hidden initially) -->
+      <div id="registered-summary" class="hidden mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+        <div class="flex items-center gap-2 text-emerald-700 font-semibold mb-1">
+          <span>✅ ลงทะเบียนเรียบร้อยแล้ว</span>
+        </div>
+        <p class="text-sm text-emerald-800">ยินดีต้อนรับคุณ <strong id="summary-name"></strong></p>
+        <p class="text-xs text-emerald-600 mt-1">เบอร์โทร: <span id="summary-phone"></span></p>
+        <div class="mt-3 flex gap-2">
+          <button onclick="switchTab(2)" class="flex-1 bg-emerald-600 text-white text-sm py-2 rounded-lg font-medium">ไปสำรวจแผนที่งาน →</button>
+          <button onclick="resetUserSession()" class="px-3 py-2 text-xs text-slate-500 underline">เปลี่ยนผู้ใช้งาน</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- PAGE 2: แผนที่สำหรับสำรวจและเดินทาง (Map) -->
+    <!-- ========================================== -->
+    <section id="page-2" class="page-section hidden bg-white rounded-2xl shadow-sm border p-5">
+      <div class="mb-3 flex justify-between items-start">
+        <div>
+          <span class="inline-block px-2.5 py-0.5 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full mb-1">ภารกิจที่ 2</span>
+          <h2 class="text-xl font-bold text-slate-800">แผนที่สำรวจภายในงาน</h2>
+          <p class="text-xs text-slate-500">กดที่จุดหมุดบนแผนที่เพื่อดูข้อมูล เส้นทาง และเช็กอินให้ครบ <span id="ui-map-target">2</span> จุด</p>
+        </div>
+        <span id="ui-map-count" class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-semibold">0/2 จุด</span>
+      </div>
+
+      <!-- Interactive Floor Plan Map -->
+      <div class="relative w-full aspect-[4/3] bg-slate-100 rounded-xl border-2 border-slate-200 overflow-hidden mb-4 select-none">
+        <!-- Decorative Map Layout (สามารถเปลี่ยนเป็นรูปแผนผังงานจริงได้ด้วย <img>) -->
+        <svg class="w-full h-full text-slate-300" viewBox="0 0 400 300" fill="none">
+          <!-- Hall Border & Walkways -->
+          <rect x="10" y="10" width="380" height="280" rx="12" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="2"/>
+          <!-- Main Walkway -->
+          <path d="M 200 280 L 200 150 L 80 150 M 200 150 L 320 150 M 200 150 L 200 60" stroke="#e2e8f0" stroke-width="28" stroke-linecap="round"/>
+          <path d="M 200 280 L 200 150 L 80 150 M 200 150 L 320 150 M 200 150 L 200 60" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="6 4"/>
+          <!-- Zones -->
+          <rect x="140" y="20" width="120" height="50" rx="8" fill="#dbeafe" stroke="#93c5fd"/>
+          <text x="200" y="50" text-anchor="middle" fill="#1e40af" font-size="11" font-weight="bold">STAGE เวทีกลาง</text>
+
+          <rect x="25" y="100" width="90" height="90" rx="8" fill="#fef3c7" stroke="#fcd34d"/>
+          <text x="70" y="150" text-anchor="middle" fill="#92400e" font-size="10" font-weight="bold">ZONE A นิทรรศการ</text>
+
+          <rect x="285" y="100" width="90" height="90" rx="8" fill="#dcfce7" stroke="#86efac"/>
+          <text x="330" y="150" text-anchor="middle" fill="#166534" font-size="10" font-weight="bold">ZONE B เวิร์กชอป</text>
+
+          <rect x="25" y="215" width="110" height="55" rx="8" fill="#fce7f3" stroke="#f9a8d4"/>
+          <text x="80" y="247" text-anchor="middle" fill="#9d174d" font-size="10" font-weight="bold">จุดถ่ายรูป & แลกรางวัล</text>
+
+          <!-- Entrance -->
+          <rect x="160" y="272" width="80" height="22" rx="4" fill="#4f46e5"/>
+          <text x="200" y="287" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="bold">ทางเข้าหลัก</text>
+        </svg>
+
+        <!-- Clickable Pins Container (Rendered by JS) -->
+        <div id="map-pins-container"></div>
+      </div>
+
+      <!-- Selected Zone Detail Card -->
+      <div id="zone-detail-card" class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+        <p class="text-sm text-slate-500 text-center">👆 แตะที่หมุดสีบนแผนที่เพื่อดูรายละเอียดจุดกิจกรรมและวิธีเดินทาง</p>
+      </div>
+
+      <!-- Quick Zone List -->
+      <div class="mt-4">
+        <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">จุดสำคัญทั้งหมดในงาน</h3>
+        <div id="zone-quick-list" class="grid grid-cols-2 gap-2"></div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- PAGE 3: Quiz ตอบคำถาม -->
+    <!-- ========================================== -->
+    <section id="page-3" class="page-section hidden bg-white rounded-2xl shadow-sm border p-5">
+      <div class="mb-4">
+        <span class="inline-block px-2.5 py-0.5 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full mb-1">ภารกิจที่ 3</span>
+        <h2 class="text-xl font-bold text-slate-800">Quiz ตอบคำถามชวนคิด</h2>
+        <p class="text-sm text-slate-500">ตอบคำถามเกี่ยวกับงานให้ผ่านเกณฑ์ (คำใบ้ซ่อนอยู่ในแผนที่สำรวจงาน!)</p>
+      </div>
+
+      <form id="quiz-form" onsubmit="handleQuizSubmit(event)" class="space-y-5">
+        <div id="quiz-questions-container" class="space-y-4"></div>
+
+        <button type="submit" id="btn-quiz-submit"
+          class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow transition">
+          ส่งคำตอบ Quiz
+        </button>
+      </form>
+
+      <div id="quiz-result-box" class="hidden mt-4 p-4 rounded-xl border"></div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- PAGE 4: ใส่ลิงก์โพสต์ภาพลงโซเชียล -->
+    <!-- ========================================== -->
+    <section id="page-4" class="page-section hidden bg-white rounded-2xl shadow-sm border p-5">
+      <div class="mb-4">
+        <span class="inline-block px-2.5 py-0.5 bg-indigo-50 text-indigo-600 text-xs font-semibold rounded-full mb-1">ภารกิจที่ 4</span>
+        <h2 class="text-xl font-bold text-slate-800">แชร์ภาพเที่ยวงานลงโซเชียล</h2>
+        <p class="text-sm text-slate-500">โพสต์ภาพบรรยากาศภายในงานแบบสาธารณะ พร้อมติดแฮชแท็กที่กำหนด แล้วนำลิงก์มาวางด้านล่าง</p>
+      </div>
+
+      <!-- Hashtag Copy Box -->
+      <div class="bg-indigo-50 border border-indigo-200 rounded-xl p-3.5 mb-4">
+        <div class="text-xs text-indigo-700 font-medium mb-1">แฮชแท็กบังคับ (แตะเพื่อคัดลอก):</div>
+        <div class="flex items-center justify-between gap-2 bg-white px-3 py-2 rounded-lg border border-indigo-100">
+          <code id="ui-hashtags" class="text-sm font-semibold text-indigo-600 select-all">#ExpoDiscovery2026 #เที่ยวงานสุดปัง</code>
+          <button type="button" onclick="copyHashtags()" class="px-2.5 py-1 bg-indigo-600 text-white text-xs rounded-md hover:bg-indigo-700 shrink-0">
+            คัดลอก
+          </button>
+        </div>
+        <p id="copy-feedback" class="text-[11px] text-emerald-600 mt-1 hidden">✓ คัดลอกแฮชแท็กแล้ว!</p>
+      </div>
+
+      <form id="social-form" onsubmit="handleSocialSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">แพลตฟอร์มที่โพสต์</label>
+          <select id="social-platform" class="w-full px-3.5 py-2.5 border rounded-xl text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <option value="Facebook">Facebook</option>
+            <option value="Instagram">Instagram</option>
+            <option value="TikTok">TikTok</option>
+            <option value="X (Twitter)">X (Twitter)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-slate-700 mb-1">ลิงก์โพสต์ของคุณ (URL) <span class="text-red-500">*</span></label>
+          <input type="url" id="social-url" required placeholder="https://www.facebook.com/..."
+            class="w-full px-3.5 py-2.5 border rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none text-sm" />
+          <p class="text-[11px] text-slate-400 mt-1">* โปรดตั้งค่าโพสต์เป็นสาธารณะ (Public) เพื่อให้เจ้าหน้าที่ตรวจสอบได้</p>
+        </div>
+
+        <label class="flex items-start gap-2.5 text-xs text-slate-600 cursor-pointer">
+          <input type="checkbox" id="social-confirm-hashtag" required class="mt-0.5 rounded text-indigo-600" />
+          <span>ยืนยันว่าได้ติดแฮชแท็กครบถ้วนในแคปชั่นของโพสต์แล้ว</span>
+        </label>
+
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 rounded-xl shadow transition">
+          ส่งลิงก์ยืนยันภารกิจ
+        </button>
+      </form>
+
+      <div id="social-success-box" class="hidden mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-800">
+        <div class="font-semibold mb-1">✅ ส่งลิงก์โซเชียลเรียบร้อยแล้ว</div>
+        <p class="text-xs break-all">ลิงก์: <a id="social-saved-link" href="#" target="_blank" class="underline text-indigo-600"></a></p>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- PAGE 5: หน้ารับรหัสคูปอง & ดาวน์โหลด E-Book -->
+    <!-- ========================================== -->
+    <section id="page-5" class="page-section hidden bg-white rounded-2xl shadow-sm border p-5">
+      <!-- Locked State -->
+      <div id="reward-locked" class="text-center py-8">
+        <div class="text-5xl mb-3">🔒</div>
+        <h2 class="text-xl font-bold text-slate-800 mb-2">ยังปลดล็อกรางวัลไม่ได้</h2>
+        <p class="text-sm text-slate-500 mb-5">กรุณาทำภารกิจทั้ง 4 ขั้นตอนให้ครบถ้วน เพื่อรับรหัสแลกของที่ระลึกและดาวน์โหลด E-Book</p>
+        <div id="missing-missions-list" class="text-left max-w-xs mx-auto space-y-2 text-sm mb-5"></div>
+        <button onclick="goToNextIncompleteMission()" class="bg-indigo-600 text-white px-6 py-2.5 rounded-xl font-medium text-sm shadow">
+          ไปทำภารกิจถัดไป →
+        </button>
+      </div>
+
+      <!-- Unlocked State -->
+      <div id="reward-unlocked" class="hidden text-center">
+        <div class="inline-block px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full mb-2">
+          🎉 ยินดีด้วย! คุณทำภารกิจครบทั้งหมดแล้ว
+        </div>
+        <h2 class="text-2xl font-bold text-slate-800 mb-1">คูปองแลกของที่ระลึก</h2>
+        <p class="text-xs text-slate-500 mb-4">นำหน้าจอนี้ไปแสดงที่จุดแลกของรางวัล (โซนประตูทางเข้า)</p>
+
+        <!-- Coupon Ticket Card -->
+        <div class="bg-gradient-to-br from-indigo-50 to-violet-50 border-2 border-dashed border-indigo-300 rounded-2xl p-5 mb-5 relative">
+          <div id="coupon-qr-container" class="flex justify-center mb-3 bg-white p-3 rounded-xl inline-block mx-auto shadow-sm"></div>
+
+          <div class="text-xs text-slate-500 uppercase tracking-wider">รหัสคูปองของคุณ</div>
+          <div id="ui-coupon-code" class="text-2xl font-extrabold tracking-widest text-indigo-700 my-1">---</div>
+
+          <div class="text-xs text-slate-600 mb-3">ผู้รับสิทธิ์: <span id="ui-coupon-owner" class="font-semibold"></span></div>
+
+          <div id="coupon-status-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+            ● พร้อมใช้งาน (ยังไม่แลกรับ)
+          </div>
+
+          <!-- Staff Redeem Button -->
+          <div class="mt-4 pt-3 border-t border-indigo-200/60">
+            <button id="btn-staff-redeem" onclick="staffRedeemCoupon()" class="text-xs text-indigo-600 hover:underline font-medium">
+              [สำหรับเจ้าหน้าที่] กดเพื่อยืนยันการรับของที่ระลึกแล้ว
+            </button>
+          </div>
+        </div>
+
+        <!-- E-Book Download Card -->
+        <div class="bg-slate-800 text-white rounded-2xl p-5 text-left flex items-center justify-between gap-4">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider bg-amber-400 text-slate-900 font-bold px-2 py-0.5 rounded">Exclusive E-Book</span>
+            <h3 class="font-bold text-base mt-1">คู่มือสรุปความรู้ภายในงาน 2026</h3>
+            <p class="text-xs text-slate-300 mt-0.5">ไฟล์ PDF สำหรับผู้พิชิตภารกิจครบ 4 ด่าน</p>
+          </div>
+          <button onclick="downloadEbook()" class="shrink-0 bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold px-4 py-2.5 rounded-xl text-sm shadow transition">
+            📥 ดาวน์โหลด
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- ADMIN MODAL (ดูสถิติ, จำนวน, ข้อมูล, Export) -->
+  <!-- ========================================== -->
+  <div id="admin-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-5 py-4 border-b flex items-center justify-between bg-slate-50">
+        <h3 class="font-bold text-lg text-slate-800">📊 ระบบหลังบ้าน & สถิติกิจกรรม</h3>
+        <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+      </div>
+
+      <div class="p-5 overflow-y-auto space-y-5">
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="p-3 bg-indigo-50 rounded-xl border border-indigo-100">
+            <div class="text-xs text-indigo-600">ลงทะเบียนทั้งหมด</div>
+            <div id="adm-total-reg" class="text-2xl font-bold text-indigo-900">0</div>
+          </div>
+          <div class="p-3 bg-sky-50 rounded-xl border border-sky-100">
+            <div class="text-xs text-sky-600">ผ่าน Quiz แล้ว</div>
+            <div id="adm-total-quiz" class="text-2xl font-bold text-sky-900">0</div>
+          </div>
+          <div class="p-3 bg-amber-50 rounded-xl border border-amber-100">
+            <div class="text-xs text-amber-600">ออกคูปองแล้ว</div>
+            <div id="adm-total-coupon" class="text-2xl font-bold text-amber-900">0</div>
+          </div>
+          <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+            <div class="text-xs text-emerald-600">รับของแล้ว / E-Book</div>
+            <div class="text-lg font-bold text-emerald-900"><span id="adm-total-redeemed">0</span> / <span id="adm-total-ebook">0</span></div>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-wrap gap-2 justify-between items-center">
+          <div class="text-xs text-slate-500">
+            โหมดจัดเก็บ: <span id="adm-storage-mode" class="font-semibold text-indigo-600">LocalStorage (เครื่องนี้)</span>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="exportCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg">
+              ⬇️ Export ข้อมูล (CSV)
+            </button>
+            <button onclick="clearAllDemoData()" class="px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold rounded-lg border border-red-200">
+              ล้างข้อมูลทดสอบ
+            </button>
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="border rounded-xl overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 text-slate-600 border-b">
+              <tr>
+                <th class="p-2.5">ชื่อ - เบอร์โทร</th>
+                <th class="p-2.5">แผนที่/Quiz/แชร์</th>
+                <th class="p-2.5">ลิงก์โซเชียล</th>
+                <th class="p-2.5">รหัสคูปอง</th>
+                <th class="p-2.5">สถานะรับของ</th>
+              </tr>
+            </thead>
+            <tbody id="adm-table-body" class="divide-y"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT LOGIC -->
+  <!-- ========================================== -->
+  <script>
+    // 1. ตั้งค่าหลักของงาน (ปรับแต่งได้ตรงนี้)
+    const CONFIG = {
+      eventName: "Expo Discovery 2026",
+      hashtags: "#ExpoDiscovery2026 #เที่ยวงานสุดปัง",
+      totalCouponQuota: 500,          // จำนวนคูปองทั้งหมดที่มีแจก
+      minMapZonesToPass: 2,           // ต้องสำรวจแผนที่อย่างน้อยกี่จุด
+      minQuizScoreToPass: 2,          // ต้องตอบถูกอย่างน้อยกี่ข้อ
+      staffPin: "1234",               // รหัส PIN สำหรับเจ้าหน้าที่กดยืนยัน/เปิดดู Admin
+      ebookUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // ใส่ลิงก์ไฟล์ PDF E-Book จริงของคุณ
+      googleScriptUrl: ""             // ใส่ Web App URL จาก Google Apps Script ถ้าต้องการเก็บลง Google Sheets
+    };
+
+    // ข้อมูลจุดบนแผนที่ (ตำแหน่ง x, y เป็น % บนภาพ)
+    const MAP_ZONES = [
+      {
+        id: "stage",
+        name: "เวทีกลาง (Main Stage)",
+        x: 50, y: 15,
+        color: "bg-blue-600",
+        desc: "พื้นที่เสวนาและกิจกรรมพิเศษตลอดทั้งวัน พบกับวิทยากรรับเชิญเวลา 13.00 น. และ 16.00 น.",
+        direction: "เดินตรงจากประตูทางเข้าหลักตรงไปจนสุดทางเดิน",
+        clue: "คำใบ้ Quiz: งานในปีนี้จัดขึ้นภายใต้ธีม Future & Green Innovation"
+      },
+      {
+        id: "zoneA",
+        name: "Zone A: นิทรรศการนวัตกรรม",
+        x: 18, y: 48,
+        color: "bg-amber-500",
+        desc: "จัดแสดงเทคโนโลยีรักษ์โลก ต้นแบบพลังงานสะอาด และนิทรรศการประวัติความเป็นมา",
+        direction: "เดินจากทางเข้าหลักมาถึงกลางโถง แล้วเลี้ยวซ้าย",
+        clue: "คำใบ้ Quiz: คูปองที่ระลึกในงานมีจำนวนจำกัดและสามารถดาวน์โหลด E-Book ได้ฟรีหลังจบภารกิจ"
+      },
+      {
+        id: "zoneB",
+        name: "Zone B: เวิร์กชอป & ทดลองทำ",
+        x: 82, y: 48,
+        color: "bg-emerald-600",
+        desc: "บูธกิจกรรมเวิร์กชอป DIY ทำของใช้รักษ์โลกด้วยตัวเอง เปิดให้บริการรอบละ 30 นาที",
+        direction: "เดินจากทางเข้าหลักมาถึงกลางโถง แล้วเลี้ยวขวา",
+        clue: "คำใบ้ Quiz: โซน B เปิดให้ทำเวิร์กชอป DIY รอบละ 30 นาที"
+      },
+      {
+        id: "reward",
+        name: "จุดถ่ายรูป & เคาน์เตอร์แลกรางวัล",
+        x: 20, y: 80,
+        color: "bg-pink-600",
+        desc: "จุดถ่ายภาพ Landmark ประจำงาน พร้อมเคาน์เตอร์สแกนรับของที่ระลึกเมื่อทำภารกิจครบ",
+        direction: "อยู่บริเวณฝั่งซ้ายใกล้ประตูทางเข้าหลัก",
+        clue: "คำใบ้ Quiz: อย่าลืมถ่ายรูปจุดนี้แล้วโพสต์พร้อมติดแฮชแท็ก!"
+      }
+    ];
+
+    // คำถาม Quiz
+    const QUIZ_QUESTIONS = [
+      {
+        id: "q1",
+        question: "1. ธีมหลักของงานที่จัดแสดงบนเวทีกลางคืออะไร?",
+        options: [
+          "Future & Green Innovation",
+          "Classic Retro Music",
+          "Street Food Festival"
+        ],
+        answerIndex: 0
+      },
+      {
+        id: "q2",
+        question: "2. กิจกรรมเวิร์กชอป DIY ใน Zone B ใช้เวลารอบละกี่นาที?",
+        options: [
+          "10 นาที",
+          "30 นาที",
+          "90 นาที"
+        ],
+        answerIndex: 1
+      },
+      {
+        id: "q3",
+        question: "3. เมื่อทำภารกิจครบทั้ง 4 ขั้นตอน ผู้ร่วมงานจะได้รับอะไรบ้าง?",
+        options: [
+          "เฉพาะสติกเกอร์",
+          "รหัสแลกของที่ระลึก และลิงก์ดาวน์โหลด E-Book",
+          "บัตรจอดรถเท่านั้น"
+        ],
+        answerIndex: 1
+      }
+    ];
+
+    // ==========================================
+    // STATE MANAGEMENT & DATABASE LAYER
+    // ==========================================
+    const DB_KEY = "event_quest_participants_v1";
+    const CURRENT_USER_KEY = "event_quest_current_phone_v1";
+
+    let currentUser = null;
+    let globalStats = { totalCouponsIssued: 0 };
+
+    function getLocalDB() {
+      return JSON.parse(localStorage.getItem(DB_KEY) || "[]");
+    }
+
+    function saveLocalDB(list) {
+      localStorage.setItem(DB_KEY, JSON.stringify(list));
+    }
+
+    // บันทึกหรืออัปเดตข้อมูลผู้ใช้งานลงทั้ง LocalStorage และ Google Sheets (ถ้าตั้งค่าไว้)
+    async function persistUser(userObj) {
+      const db = getLocalDB();
+      const idx = db.findIndex(u => u.phone === userObj.phone);
+      if (idx >= 0) {
+        db[idx] = userObj;
+      } else {
+        db.push(userObj);
+      }
+      saveLocalDB(db);
+      currentUser = userObj;
+      localStorage.setItem(CURRENT_USER_KEY, userObj.phone);
+
+      // Sync to Google Sheets if configured
+      if (CONFIG.googleScriptUrl) {
+        try {
+          await fetch(CONFIG.googleScriptUrl, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "upsert", data: userObj })
+          });
+        } catch (err) {
+          console.warn("Google Sheets Sync Warning:", err);
+        }
+      }
+      refreshUI();
+    }
+
+    async function loadStatsFromServer() {
+      const db = getLocalDB();
+      let issuedCount = db.filter(u => u.couponCode).length;
+
+      if (CONFIG.googleScriptUrl) {
+        try {
+          const res = await fetch(`${CONFIG.googleScriptUrl}?action=stats`);
+          const json = await res.json();
+          if (typeof json.totalCouponsIssued === "number") {
+            issuedCount = json.totalCouponsIssued;
+          }
+        } catch (err) {
+          console.warn("Fetch stats failed, using local count", err);
+        }
+      }
+      globalStats.totalCouponsIssued = issuedCount;
+      const remaining = Math.max(0, CONFIG.totalCouponQuota - issuedCount);
+      document.getElementById("ui-remaining-coupons").textContent = remaining.toLocaleString();
+    }
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    window.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("ui-event-name").textContent = CONFIG.eventName;
+      document.getElementById("ui-hashtags").textContent = CONFIG.hashtags;
+      document.getElementById("ui-map-target").textContent = CONFIG.minMapZonesToPass;
+      if (CONFIG.googleScriptUrl) {
+        document.getElementById("adm-storage-mode").textContent = "Google Sheets + Local Cache";
+      }
+
+      renderMapPins();
+      renderQuizQuestions();
+
+      // Restore session
+      const savedPhone = localStorage.getItem(CURRENT_USER_KEY);
+      if (savedPhone) {
+        const db = getLocalDB();
+        currentUser = db.find(u => u.phone === savedPhone) || null;
+      }
+
+      refreshUI();
+      switchTab(currentUser ? getNextMissionStep() : 1);
+      loadStatsFromServer();
+    });
+
+    // ==========================================
+    // NAVIGATION & PROGRESS UI
+    // ==========================================
+    function switchTab(step) {
+      // Allow viewing Step 1 & Step 2 anytime, require registration for 3, 4, 5
+      if (step >= 3 && !currentUser) {
+        alert("กรุณาลงทะเบียนในขั้นตอนที่ 1 ก่อนทำภารกิจนี้ครับ");
+        step = 1;
+      }
+
+      document.querySelectorAll(".page-section").forEach(el => el.classList.add("hidden"));
+      document.getElementById(`page-${step}`).classList.remove("hidden");
+
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("tab-active"));
+      document.getElementById(`tab-btn-${step}`).classList.add("tab-active");
+
+      if (step === 5) renderRewardPage();
+    }
+
+    function isMissionDone(num) {
+      if (!currentUser) return false;
+      if (num === 1) return true;
+      if (num === 2) return (currentUser.exploredZones || []).length >= CONFIG.minMapZonesToPass;
+      if (num === 3) return currentUser.quizPassed === true;
+      if (num === 4) return Boolean(currentUser.socialUrl);
+      return false;
+    }
+
+    function getNextMissionStep() {
+      for (let i = 1; i <= 4; i++) {
+        if (!isMissionDone(i)) return i;
+      }
+      return 5;
+    }
+
+    function goToNextIncompleteMission() {
+      switchTab(getNextMissionStep());
+    }
+
+    function refreshUI() {
+      // Update progress bar
+      let completed = 0;
+      const icons = ["1️⃣", "🗺️", "❓", "📸"];
+      for (let i = 1; i <= 4; i++) {
+        const done = isMissionDone(i);
+        if (done) completed++;
+        document.getElementById(`status-icon-${i}`).textContent = done ? "✅" : icons[i - 1];
+      }
+      document.getElementById("status-icon-5").textContent = completed === 4 ? "🎁" : "🔒";
+      document.getElementById("ui-progress-text").textContent = `${completed} / 4 สำเร็จ`;
+      document.getElementById("ui-progress-bar").style.width = `${(completed / 4) * 100}%`;
+
+      // Update Page 1 UI
+      if (currentUser) {
+        document.getElementById("register-form").classList.add("hidden");
+        document.getElementById("registered-summary").classList.remove("hidden");
+        document.getElementById("summary-name").textContent = currentUser.name;
+        document.getElementById("summary-phone").textContent = currentUser.phone;
+      } else {
+        document.getElementById("register-form").classList.remove("hidden");
+        document.getElementById("registered-summary").classList.add("hidden");
+      }
+
+      // Update Page 2 Map UI
+      const exploredCount = currentUser ? (currentUser.exploredZones || []).length : 0;
+      document.getElementById("ui-map-count").textContent = `${exploredCount}/${CONFIG.minMapZonesToPass} จุด`;
+      renderMapPins();
+
+      // Update Page 3 Quiz UI
+      if (currentUser && currentUser.quizPassed) {
+        const box = document.getElementById("quiz-result-box");
+        box.className = "mt-4 p-4 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 text-sm";
+        box.innerHTML = `✅ คุณผ่านภารกิจ Quiz แล้ว (คะแนน ${currentUser.quizScore}/${QUIZ_QUESTIONS.length})`;
+        box.classList.remove("hidden");
+      }
+
+      // Update Page 4 Social UI
+      if (currentUser && currentUser.socialUrl) {
+        document.getElementById("social-success-box").classList.remove("hidden");
+        const a = document.getElementById("social-saved-link");
+        a.href = currentUser.socialUrl;
+        a.textContent = currentUser.socialUrl;
+        document.getElementById("social-url").value = currentUser.socialUrl;
+        document.getElementById("social-platform").value = currentUser.socialPlatform || "Facebook";
+      }
+
+      loadStatsFromServer();
+    }
+
+    // ==========================================
+    // PAGE 1: REGISTRATION
+    // ==========================================
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById("reg-name").value.trim();
+      const phone = document.getElementById("reg-phone").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const group = document.getElementById("reg-group").value;
+
+      const db = getLocalDB();
+      const existing = db.find(u => u.phone === phone);
+
+      if (existing) {
+        // Login back into existing progress
+        await persistUser(existing);
+        alert(`พบข้อมูลเดิมของคุณ ${existing.name} ระบบดึงความคืบหน้าเดิมกลับมาให้แล้วครับ`);
+      } else {
+        const newUser = {
+          id: "USR-" + Date.now().toString(36).toUpperCase(),
+          name,
+          phone,
+          email,
+          group,
+          exploredZones: [],
+          quizPassed: false,
+          quizScore: 0,
+          socialPlatform: "",
+          socialUrl: "",
+          couponCode: "",
+          redeemed: false,
+          ebookDownloaded: false,
+          createdAt: new Date().toISOString()
+        };
+        await persistUser(newUser);
+      }
+      switchTab(2);
+    }
+
+    function resetUserSession() {
+      if (confirm("ต้องการออกจากระบบเพื่อลงทะเบียนผู้ใช้งานคนใหม่ใช่หรือไม่?")) {
+        localStorage.removeItem(CURRENT_USER_KEY);
+        currentUser = null;
+        document.getElementById("register-form").reset();
+        document.getElementById("quiz-form").reset();
+        document.getElementById("quiz-result-box").classList.add("hidden");
+        document.getElementById("social-form").reset();
+        document.getElementById("social-success-box").classList.add("hidden");
+        refreshUI();
+        switchTab(1);
+      }
+    }
+
+    // ==========================================
+    // PAGE 2: INTERACTIVE MAP
+    // ==========================================
+    function renderMapPins() {
+      const container = document.getElementById("map-pins-container");
+      const quickList = document.getElementById("zone-quick-list");
+      const explored = currentUser ? (currentUser.exploredZones || []) : [];
+
+      container.innerHTML = "";
+      quickList.innerHTML = "";
+
+      MAP_ZONES.forEach(zone => {
+        const isChecked = explored.includes(zone.id);
+
+        // Pin on Map
+        const pin = document.createElement("button");
+        pin.type = "button";
+        pin.style.left = `${zone.x}%`;
+        pin.style.top = `${zone.y}%`;
+        pin.className = `absolute -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full ${isChecked ? 'bg-emerald-500' : zone.color} text-white text-xs font-bold shadow-lg border-2 border-white flex items-center justify-center transition hover:scale-110 ${!isChecked ? 'pin-pulse' : ''}`;
+        pin.innerHTML = isChecked ? "✓" : "📍";
+        pin.onclick = () => selectMapZone(zone.id);
+        container.appendChild(pin);
+
+        // Quick Button below Map
+        const qBtn = document.createElement("button");
+        qBtn.type = "button";
+        qBtn.onclick = () => selectMapZone(zone.id);
+        qBtn.className = `p-2.5 rounded-xl border text-left text-xs transition flex items-center justify-between ${isChecked ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-white hover:bg-slate-50'}`;
+        qBtn.innerHTML = `<span class="font-medium truncate pr-1">${zone.name}</span><span>${isChecked ? '✅' : '➡️'}</span>`;
+        quickList.appendChild(qBtn);
+      });
+    }
+
+    function selectMapZone(zoneId) {
+      const zone = MAP_ZONES.find(z => z.id === zoneId);
+      if (!zone) return;
+
+      const explored = currentUser ? (currentUser.exploredZones || []) : [];
+      const isChecked = explored.includes(zone.id);
+
+      const card = document.getElementById("zone-detail-card");
+      card.innerHTML = `
+        <div class="flex justify-between items-start gap-2 mb-2">
+          <h4 class="font-bold text-slate-800 text-base">${zone.name}</h4>
+          ${isChecked ? '<span class="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[11px] font-semibold rounded-full shrink-0">✓ สำรวจแล้ว</span>' : ''}
+        </div>
+        <p class="text-xs text-slate-600 mb-2">${zone.desc}</p>
+        <div class="text-xs bg-white p-2.5 rounded-lg border mb-2">
+          <strong>🧭 การเดินทาง:</strong> ${zone.direction}
+        </div>
+        <div class="text-xs bg-amber-50 text-amber-800 p-2.5 rounded-lg border border-amber-200 mb-3">
+          <strong>💡 ${zone.clue}</strong>
+        </div>
+        ${!isChecked ? `
+          <button onclick="checkInZone('${zone.id}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold py-2.5 rounded-xl shadow transition">
+            📍 เช็กอินสำรวจจุดนี้ (+1)
+          </button>
+        ` : `
+          <button onclick="switchTab(3)" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2.5 rounded-xl transition">
+            ไปทำภารกิจ Quiz ต่อ →
+          </button>
+        `}
+      `;
+    }
+
+    async function checkInZone(zoneId) {
+      if (!currentUser) {
+        alert("กรุณาลงทะเบียนก่อนกดเช็กอินนะครับ");
+        switchTab(1);
+        return;
+      }
+      if (!currentUser.exploredZones.includes(zoneId)) {
+        currentUser.exploredZones.push(zoneId);
+        await persistUser(currentUser);
+      }
+      selectMapZone(zoneId);
+    }
+
+    // ==========================================
+    // PAGE 3: QUIZ
+    // ==========================================
+    function renderQuizQuestions() {
+      const container = document.getElementById("quiz-questions-container");
+      container.innerHTML = QUIZ_QUESTIONS.map((q, qIdx) => `
+        <div class="p-4 bg-slate-50 border rounded-xl">
+          <p class="font-semibold text-sm text-slate-800 mb-2.5">${q.question}</p>
+          <div class="space-y-2">
+            ${q.options.map((opt, oIdx) => `
+              <label class="flex items-center gap-2.5 p-2.5 bg-white border rounded-lg cursor-pointer hover:border-indigo-400 text-sm">
+                <input type="radio" name="quiz_${q.id}" value="${oIdx}" required class="text-indigo-600 focus:ring-indigo-500" />
+                <span>${opt}</span>
+              </label>
+            `).join("")}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function handleQuizSubmit(e) {
+      e.preventDefault();
+      if (!currentUser) return switchTab(1);
+
+      let score = 0;
+      QUIZ_QUESTIONS.forEach(q => {
+        const selected = document.querySelector(`input[name="quiz_${q.id}"]:checked`);
+        if (selected && parseInt(selected.value, 10) === q.answerIndex) {
+          score++;
+        }
+      });
+
+      const passed = score >= CONFIG.minQuizScoreToPass;
+      const box = document.getElementById("quiz-result-box");
+      box.classList.remove("hidden");
+
+      if (passed) {
+        currentUser.quizPassed = true;
+        currentUser.quizScore = score;
+        await persistUser(currentUser);
+        box.className = "mt-4 p-4 rounded-xl border bg-emerald-50 border-emerald-200 text-emerald-800 text-sm";
+        box.innerHTML = `
+          <div class="font-bold mb-1">🎉 ยอดเยี่ยม! คุณตอบถูก ${score} / ${QUIZ_QUESTIONS.length} ข้อ</div>
+          <p class="text-xs mb-3">ผ่านภารกิจที่ 3 เรียบร้อยแล้ว</p>
+          <button type="button" onclick="switchTab(4)" class="bg-emerald-600 text-white px-4 py-2 rounded-lg text-xs font-semibold">ไปภารกิจที่ 4 (แชร์ภาพลงโซเชียล) →</button>
+        `;
+      } else {
+        box.className = "mt-4 p-4 rounded-xl border bg-red-50 border-red-200 text-red-800 text-sm";
+        box.innerHTML = `
+          <div class="font-bold mb-1">❌ คุณตอบถูก ${score} / ${QUIZ_QUESTIONS.length} ข้อ (ต้องถูกอย่างน้อย ${CONFIG.minQuizScoreToPass} ข้อ)</div>
+          <p class="text-xs">ลองกลับไปดูคำใบ้ในหน้าแผนที่งาน แล้วเลือกคำตอบใหม่อีกครั้งนะครับ</p>
+        `;
+      }
+    }
+
+    // ==========================================
+    // PAGE 4: SOCIAL SHARE LINK
+    // ==========================================
+    function copyHashtags() {
+      navigator.clipboard.writeText(CONFIG.hashtags);
+      const fb = document.getElementById("copy-feedback");
+      fb.classList.remove("hidden");
+      setTimeout(() => fb.classList.add("hidden"), 2500);
+    }
+
+    async function handleSocialSubmit(e) {
+      e.preventDefault();
+      if (!currentUser) return switchTab(1);
+
+      const platform = document.getElementById("social-platform").value;
+      const url = document.getElementById("social-url").value.trim();
+
+      if (!url.startsWith("http://") && !url.startsWith("https://")) {
+        alert("กรุณากรอกลิงก์ URL ที่ขึ้นต้นด้วย https:// ให้ถูกต้อง");
+        return;
+      }
+
+      currentUser.socialPlatform = platform;
+      currentUser.socialUrl = url;
+      await persistUser(currentUser);
+
+      alert("บันทึกข้อมูลการแชร์เรียบร้อย! ตรวจสอบสถานะรางวัลในหน้าถัดไปได้เลยครับ");
+      switchTab(getNextMissionStep());
+    }
+
+    // ==========================================
+    // PAGE 5: REWARD COUPON & E-BOOK
+    // ==========================================
+    async function renderRewardPage() {
+      const allDone = [1, 2, 3, 4].every(isMissionDone);
+      const lockedEl = document.getElementById("reward-locked");
+      const unlockedEl = document.getElementById("reward-unlocked");
+
+      if (!allDone) {
+        lockedEl.classList.remove("hidden");
+        unlockedEl.classList.add("hidden");
+
+        const names = [
+          "1. ลงทะเบียนร่วมกิจกรรม",
+          `2. สำรวจแผนที่อย่างน้อย ${CONFIG.minMapZonesToPass} จุด`,
+          "3. ตอบคำถาม Quiz ให้ผ่านเกณฑ์",
+          "4. ส่งลิงก์โพสต์ภาพลงโซเชียล"
+        ];
+        document.getElementById("missing-missions-list").innerHTML = names.map((n, idx) => {
+          const ok = isMissionDone(idx + 1);
+          return `<div class="p-2 rounded-lg border ${ok ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-slate-50 text-slate-600'}">${ok ? '✅' : '⬜'} ${n}</div>`;
+        }).join("");
+        return;
+      }
+
+      // Check quota & Generate Coupon Code if needed
+      if (!currentUser.couponCode) {
+        const remaining = CONFIG.totalCouponQuota - globalStats.totalCouponsIssued;
+        if (remaining <= 0) {
+          alert("ขออภัย คูปองของที่ระลึกครบตามจำนวนโควต้าแล้ว แต่คุณยังสามารถดาวน์โหลด E-Book ได้ครับ");
+        } else {
+          const randomPart = Math.random().toString(36).substring(2, 7).toUpperCase();
+          currentUser.couponCode = `EXP-${randomPart}`;
+          await persistUser(currentUser);
+        }
+      }
+
+      lockedEl.classList.add("hidden");
+      unlockedEl.classList.remove("hidden");
+
+      document.getElementById("ui-coupon-code").textContent = currentUser.couponCode || "QUOTA-FULL";
+      document.getElementById("ui-coupon-owner").textContent = `${currentUser.name} (${currentUser.phone})`;
+
+      // Render QR Code
+      const qrBox = document.getElementById("coupon-qr-container");
+      qrBox.innerHTML = "";
+      if (currentUser.couponCode && typeof QRCode !== "undefined") {
+        new QRCode(qrBox, {
+          text: JSON.stringify({ code: currentUser.couponCode, phone: currentUser.phone }),
+          width: 140,
+          height: 140
+        });
+      }
+
+      // Update Redeem Status
+      const badge = document.getElementById("coupon-status-badge");
+      const btnRedeem = document.getElementById("btn-staff-redeem");
+      if (currentUser.redeemed) {
+        badge.className = "inline-block px-3 py-1 rounded-full text-xs font-semibold bg-slate-200 text-slate-600";
+        badge.textContent = "✓ ใช้สิทธิ์แลกของที่ระลึกแล้ว";
+        btnRedeem.classList.add("hidden");
+      } else {
+        badge.className = "inline-block px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700";
+        badge.textContent = "● พร้อมใช้งาน (ยังไม่แลกรับ)";
+        btnRedeem.classList.remove("hidden");
+      }
+    }
+
+    async function staffRedeemCoupon() {
+      const pin = prompt("สำหรับเจ้าหน้าที่: กรุณากรอกรหัส PIN เพื่อยืนยันการมอบของที่ระลึก");
+      if (pin === null) return;
+      if (pin !== CONFIG.staffPin) {
+        alert("รหัส PIN ไม่ถูกต้อง");
+        return;
+      }
+      currentUser.redeemed = true;
+      currentUser.redeemedAt = new Date().toISOString();
+      await persistUser(currentUser);
+      renderRewardPage();
+      alert("บันทึกการแลกรับของที่ระลึกเรียบร้อยแล้ว!");
+    }
+
+    async function downloadEbook() {
+      if (!currentUser.ebookDownloaded) {
+        currentUser.ebookDownloaded = true;
+        await persistUser(currentUser);
+      }
+      window.open(CONFIG.ebookUrl, "_blank");
+    }
+
+    // ==========================================
+    // ADMIN DASHBOARD & EXPORT
+    // ==========================================
+    function openAdminModal() {
+      const pin = prompt("กรุณากรอกรหัส PIN ผู้ดูแลระบบ (ค่าเริ่มต้น: 1234)");
+      if (pin !== CONFIG.staffPin) {
+        if (pin !== null) alert("รหัสผ่านไม่ถูกต้อง");
+        return;
+      }
+      renderAdminData();
+      document.getElementById("admin-modal").classList.remove("hidden");
+    }
+
+    function closeAdminModal() {
+      document.getElementById("admin-modal").classList.add("hidden");
+    }
+
+    function renderAdminData() {
+      const db = getLocalDB();
+      document.getElementById("adm-total-reg").textContent = db.length;
+      document.getElementById("adm-total-quiz").textContent = db.filter(u => u.quizPassed).length;
+      document.getElementById("adm-total-coupon").textContent = db.filter(u => u.couponCode).length;
+      document.getElementById("adm-total-redeemed").textContent = db.filter(u => u.redeemed).length;
+      document.getElementById("adm-total-ebook").textContent = db.filter(u => u.ebookDownloaded).length;
+
+      const tbody = document.getElementById("adm-table-body");
+      if (db.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">ยังไม่มีข้อมูลผู้ร่วมกิจกรรม</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = db.map(u => `
+        <tr class="hover:bg-slate-50">
+          <td class="p-2.5">
+            <div class="font-semibold">${u.name}</div>
+            <div class="text-[11px] text-slate-500">${u.phone}</div>
+          </td>
+          <td class="p-2.5">
+            🗺️ ${(u.exploredZones || []).length} | ❓ ${u.quizPassed ? 'ผ่าน' : '-'} | 📸 ${u.socialUrl ? 'ส่งแล้ว' : '-'}
+          </td>
+          <td class="p-2.5 max-w-[140px] truncate">
+            ${u.socialUrl ? `<a href="${u.socialUrl}" target="_blank" class="text-indigo-600 underline">${u.socialPlatform}</a>` : '-'}
+          </td>
+          <td class="p-2.5 font-mono font-bold text-indigo-700">${u.couponCode || '-'}</td>
+          <td class="p-2.5">
+            ${u.redeemed ? '<span class="text-emerald-600 font-semibold">✓ แลกแล้ว</span>' : (u.couponCode ? '<span class="text-amber-600">รอแลก</span>' : '-')}
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function exportCSV() {
+      const db = getLocalDB();
+      if (db.length === 0) return alert("ไม่มีข้อมูลสำหรับ Export");
+
+      const headers = ["ID", "ชื่อ", "เบอร์โทร", "อีเมล", "กลุ่ม", "จำนวนจุดแผนที่", "Quizผ่าน", "แพลตฟอร์ม", "ลิงก์โซเชียล", "รหัสคูปอง", "แลกรับแล้ว", "โหลดE-Bookแล้ว", "เวลาลงทะเบียน"];
+      const rows = db.map(u => [
+        u.id, `"${u.name}"`, `"${u.phone}"`, `"${u.email}"`, `"${u.group}"`,
+        (u.exploredZones || []).length, u.quizPassed ? "Yes" : "No",
+        `"${u.socialPlatform || ""}"`, `"${u.socialUrl || ""}"`,
+        u.couponCode || "", u.redeemed ? "Yes" : "No", u.ebookDownloaded ? "Yes" : "No", u.createdAt
+      ]);
+
+      const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `event_data_${new Date().toISOString().slice(0, 10)}.csv`;
+      link.click();
+    }
+
+    function clearAllDemoData() {
+      if (confirm("ยืนยันการลบข้อมูลผู้ร่วมกิจกรรมทั้งหมดในเครื่องนี้?")) {
+        localStorage.removeItem(DB_KEY);
+        localStorage.removeItem(CURRENT_USER_KEY);
+        currentUser = null;
+        renderAdminData();
+        refreshUI();
+        switchTab(1);
+      }
+    }
+  </script>
+</body>
 </html>
